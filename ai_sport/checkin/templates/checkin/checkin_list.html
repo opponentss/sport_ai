@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打卡记录</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>打卡记录</h1>
+        <div class="mb-3">
+            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
+            <a href="{% url 'checkin_create' %}" class="btn btn-primary">添加打卡</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>活动</th>
+                    <th>时长（分钟）</th>
+                    <th>日期</th>
+                    <th>时间</th>
+                    <th>位置</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for checkin in checkins %}
+                <tr>
+                    <td>{{ checkin.activity }}</td>
+                    <td>{{ checkin.duration }}</td>
+                    <td>{{ checkin.date }}</td>
+                    <td>{{ checkin.time }}</td>
+                    <td>{{ checkin.location|default:"未记录" }}</td>
+                    <td>
+                        <a href="{% url 'checkin_update' checkin.pk %}" class="btn btn-sm btn-warning">编辑</a>
+                        <a href="{% url 'checkin_delete' checkin.pk %}" class="btn btn-sm btn-danger">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

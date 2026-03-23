@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加/编辑三餐记录</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>添加/编辑三餐记录</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.meal_type.label_tag }} {{ form.meal_type }}
+            </div>
+            <div class="form-group">
+                {{ form.date.label_tag }} {{ form.date }}
+            </div>
+            <div class="form-group">
+                {{ form.time.label_tag }} {{ form.time }}
+            </div>
+            <div class="form-group">
+                {{ form.image.label_tag }} {{ form.image }}
+            </div>
+            <div class="form-group">
+                {{ form.description.label_tag }}
+                <div class="input-group">
+                    {{ form.description }}
+                    <div class="input-group-append">
+                        <button type="button" id="ai-analyze-btn" class="btn btn-info">AI 分析</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.calories.label_tag }} {{ form.calories }}
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{% url 'meal_list' %}" class="btn btn-secondary">取消</a>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#ai-analyze-btn').click(function() {
+                // 检查是否上传了图片
+                if ($('#id_image').val() === '') {
+                    alert('请先上传食物图片');
+                    return;
+                }
+                
+                // 显示加载状态
+                $('#ai-analyze-btn').text('分析中...').prop('disabled', true);
+                
+                // 模拟 AI 分析过程
+                setTimeout(function() {
+                    // 填充模拟数据
+                    $('#id_description').val('米饭; 鸡蛋; 青菜');
+                    $('#id_calories').val('223');
+                    
+                    // 恢复按钮状态
+                    $('#ai-analyze-btn').text('AI 分析').prop('disabled', false);
+                    
+                    // 提示用户
+                    alert('AI 分析完成，已自动填充食物信息和卡路里');
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

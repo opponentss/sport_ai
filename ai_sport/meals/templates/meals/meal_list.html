@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三餐记录</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>三餐记录</h1>
+        <div class="mb-3">
+            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
+            <a href="{% url 'meal_create' %}" class="btn btn-primary">添加三餐记录</a>
+        </div>
+        <div class="row">
+            {% for meal in meals %}  
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if meal.image %}
+                    <img src="{{ meal.image.url }}" class="card-img-top" alt="{{ meal.get_meal_type_display }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ meal.get_meal_type_display }}</h5>
+                        <p class="card-text">{{ meal.date }} {{ meal.time }}</p>
+                        {% if meal.description %}
+                        <p class="card-text">{{ meal.description }}</p>
+                        {% endif %}
+                        {% if meal.calories %}
+                        <p class="card-text">卡路里：{{ meal.calories }}</p>
+                        {% endif %}
+                        <div class="btn-group">
+                            <a href="{% url 'meal_update' meal.pk %}" class="btn btn-sm btn-warning">编辑</a>
+                            <a href="{% url 'meal_delete' meal.pk %}" class="btn btn-sm btn-danger">删除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

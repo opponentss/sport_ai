@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>确认删除</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>确认删除</h1>
+        <p>确定要删除三餐记录：{{ meal.get_meal_type_display }} 吗？</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">删除</button>
+            <a href="{% url 'meal_list' %}" class="btn btn-secondary">取消</a>
+        </form>
+    </div>
+</body>
+</html>

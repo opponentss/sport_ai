@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作息记录</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>作息记录</h1>
+        <div class="mb-3">
+            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
+            <a href="{% url 'sleep_create' %}" class="btn btn-primary">添加作息记录</a>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>入睡时间</th>
+                    <th>起床时间</th>
+                    <th>睡眠时长（小时）</th>
+                    <th>睡眠质量</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sleep_record in sleep_records %}
+                <tr>
+                    <td>{{ sleep_record.date }}</td>
+                    <td>{{ sleep_record.sleep_time }}</td>
+                    <td>{{ sleep_record.wake_time }}</td>
+                    <td>{{ sleep_record.duration|default:"未记录" }}</td>
+                    <td>{{ sleep_record.get_quality_display }}</td>
+                    <td>
+                        <a href="{% url 'sleep_update' sleep_record.pk %}" class="btn btn-sm btn-warning">编辑</a>
+                        <a href="{% url 'sleep_delete' sleep_record.pk %}" class="btn btn-sm btn-danger">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
