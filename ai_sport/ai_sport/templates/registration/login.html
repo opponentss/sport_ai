@@ -107,6 +107,14 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-login">登 录</button>
                 </form>
+                    
+                <div class="text-center mt-4">
+                    <p class="mb-2">还没有账户？</p>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary" style="width: 100%;">
+                        立即注册
+                    </a>
+                </div>
+                
                 <div class="text-center mt-3">
                     <a href="{% url 'home' %}" class="text-muted">返回首页</a>
                 </div>
