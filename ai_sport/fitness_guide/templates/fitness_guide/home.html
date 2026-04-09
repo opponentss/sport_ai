@@ -1,0 +1,53 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary">← 返回首页</a>
+        </div>
+        
+        <div class="jumbotron bg-light p-4 mb-4">
+            <h1 class="display-4">{{ title }}</h1>
+            <p class="lead">{{ description }}</p>
+            <hr class="my-4">
+            <p>选择以下模块开始学习健身基础知识：</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for module in modules %}
+    <div class="col-md-4">
+        <div class="card module-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ module.name }}</h5>
+                <p class="card-text">{{ module.description }}</p>
+                <a href="{% url module.url %}" class="btn btn-primary">进入学习</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">健身小贴士</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>健身前一定要进行充分的热身，避免运动损伤</li>
+                    <li>保持正确的姿势比追求大重量更重要</li>
+                    <li>健身需要持之以恒，每周至少3次才能看到效果</li>
+                    <li>合理搭配饮食，保证充足的蛋白质摄入</li>
+                    <li>保证充足的睡眠，让肌肉有足够的时间恢复</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

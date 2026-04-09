@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'checkin',
     'meals',
     'sleep',
+    'fitness_guide',
 ]
 
 MIDDLEWARE = [
@@ -82,10 +83,11 @@ WSGI_APPLICATION = 'ai_sport.wsgi.application'
 # 优先使用环境变量中的数据库配置
 import dj_database_url
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL') #获取系统变量DATABASE_URL
 if DATABASE_URL:
     # 使用 PostgreSQL（生产环境）
     DATABASES = {
+        #dj_database_url.config将连接字符串自动转换为 Django 所需的 DATABASES 字典格式。
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,

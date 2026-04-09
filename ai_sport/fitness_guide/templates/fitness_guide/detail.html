@@ -1,0 +1,80 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }} - 健身前你该知道的{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'fitness_guide_home' %}" class="btn btn-outline-primary">← 返回健身知识首页</a>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary ml-2">返回主首页</a>
+        </div>
+        
+        <div class="jumbotron bg-light p-4 mb-4">
+            <h1 class="display-4">{{ title }}</h1>
+            <p class="lead">深入了解{{ title }}相关知识，为你的健身之路打下坚实基础</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        {% for section in sections %}
+        <div class="card section-card">
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{ section.title }}</h5>
+                <p class="card-text">{{ section.content }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">实用建议</h5>
+            </div>
+            <div class="card-body">
+                {% if title == '饮食建议' %}
+                <ul>
+                    <li>每天喝足够的水，健身期间需要更多水分</li>
+                    <li>避免空腹健身，也不要在饱腹后立即运动</li>
+                    <li>可以准备一些健康零食，如坚果、酸奶等</li>
+                    <li>记录饮食日记，了解自己的营养摄入情况</li>
+                </ul>
+                {% elif title == '肌肉认识' %}
+                <ul>
+                    <li>训练前了解目标肌肉的功能和位置</li>
+                    <li>注意肌肉的平衡发展，避免只练某些部位</li>
+                    <li>学习正确的肌肉收缩感觉，提高训练效果</li>
+                    <li>给肌肉足够的恢复时间，避免过度训练</li>
+                </ul>
+                {% elif title == '器材认识' %}
+                <ul>
+                    <li>初次使用器材前，请教练或工作人员指导</li>
+                    <li>调整器材到适合自己的位置和重量</li>
+                    <li>使用后擦拭器材，保持卫生</li>
+                    <li>注意安全，使用保护装置如腰带、护腕等</li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <div class="btn-group" role="group">
+            {% if title == '饮食建议' %}
+                <a href="{% url 'muscle_knowledge' %}" class="btn btn-outline-primary">下一个：肌肉认识 →</a>
+            {% elif title == '肌肉认识' %}
+                <a href="{% url 'equipment_knowledge' %}" class="btn btn-outline-primary">下一个：器材认识 →</a>
+            {% elif title == '器材认识' %}
+                <a href="{% url 'diet_advice' %}" class="btn btn-outline-primary">重新学习：饮食建议 →</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

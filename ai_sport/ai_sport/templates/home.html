@@ -33,6 +33,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'fitness_guide_home' %}">健身前你该知道的</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -56,7 +61,7 @@
     <div class="container mt-5">
         <h1 class="text-center mb-5">健身打卡</h1>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">打卡记录</h5>
@@ -65,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">三餐记录</h5>
@@ -74,12 +79,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">作息记录</h5>
                         <p class="card-text">记录你的睡眠情况，分析睡眠质量</p>
                         <a href="{% url 'sleep_list' %}" class="btn btn-primary">进入</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">健身前你该知道的</h5>
+                        <p class="card-text">了解健身基础知识，饮食建议，肌肉和器材认识</p>
+                        <a href="{% url 'fitness_guide_home' %}" class="btn btn-primary">进入</a>
                     </div>
                 </div>
             </div>

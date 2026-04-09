@@ -31,6 +31,7 @@ urlpatterns = [
     path('checkin/', include('checkin.urls')),
     path('meals/', include('meals.urls')),
     path('sleep/', include('sleep.urls')),
+    path('fitness-guide/', include('fitness_guide.urls')),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('accounts/register/', views.register, name='register'),
