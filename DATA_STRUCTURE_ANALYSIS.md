@@ -11,6 +11,7 @@
 - **文件存储**: 本地文件系统 (媒体文件)
 
 ### 1.2 数据库连接配置
+
 ```python
 # settings.py 中的数据库配置
 DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -21,6 +22,9 @@ else:
     # 默认使用 SQLite（开发环境）
     DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3'}}
 ```
+
+注意要提前设置系统变量DATABASE_URL=postgres://myuser:mypassword@localhost:5432/my_database
+                                 协议名
 
 ## 二、数据模型结构
 
