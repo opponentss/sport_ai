@@ -1,0 +1,28 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'equipment_detail' category equipment.id %}" class="btn btn-outline-primary">← 返回器材详情</a>
+        </div>
+
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">确认删除</h4>
+            </div>
+            <div class="card-body">
+                <p>确定要删除器材 <strong>{{ equipment.name }}</strong> 吗？</p>
+                <p class="text-muted">此操作无法撤销。</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">确认删除</button>
+                    <a href="{% url 'equipment_detail' category equipment.id %}" class="btn btn-secondary">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

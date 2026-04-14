@@ -1,0 +1,48 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'equipment_list' category %}" class="btn btn-outline-primary">← 返回器材列表</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">{{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_name">器材名称</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_category">器材类别</label>
+                        {{ form.category }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_image">器材图片</label>
+                        {{ form.image }}
+                        <small class="form-text text-muted">支持 JPG、PNG 格式的图片</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_video_url">视频链接</label>
+                        {{ form.video_url }}
+                        <small class="form-text text-muted">例如: https://youtube.com/watch?v=...</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_description">器材描述</label>
+                        {{ form.description }}
+                    </div>
+                    <button type="submit" class="btn btn-success">保存</button>
+                    <a href="{% url 'equipment_list' category %}" class="btn btn-secondary">取消</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

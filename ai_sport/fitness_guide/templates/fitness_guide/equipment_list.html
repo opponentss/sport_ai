@@ -1,0 +1,70 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'equipment_knowledge' %}" class="btn btn-outline-primary">← 返回器材分类</a>
+        </div>
+
+        <div class="jumbotron bg-light p-4 mb-4">
+            <h1 class="display-4">{{ title }}</h1>
+            {% if user.is_staff %}
+            <a href="{% url 'equipment_create' category %}" class="btn btn-success">+ 添加器材</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% if equipment_list %}
+        {% for equipment in equipment_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card equipment-card">
+                {% if equipment.image %}
+                <img src="{{ equipment.image.url }}" class="card-img-top equipment-img" alt="{{ equipment.name }}">
+                {% else %}
+                <div class="card-img-top equipment-img-placeholder d-flex align-items-center justify-content-center">
+                    <span class="text-muted">暂无图片</span>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ equipment.name }}</h5>
+                    {% if equipment.description %}
+                    <p class="card-text">{{ equipment.description|truncatewords:20 }}</p>
+                    {% endif %}
+                    {% if equipment.video_url %}
+                    <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-info btn-sm">观看视频</a>
+                    {% endif %}
+                    <a href="{% url 'equipment_detail' category equipment.id %}" class="btn btn-primary">查看详情</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                暂无器材信息{% if user.is_staff %}，点击"添加器材"开始添加{% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .equipment-card {
+        height: 100%;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .equipment-img {
+        height: 200px;
+        object-fit: cover;
+    }
+    .equipment-img-placeholder {
+        height: 200px;
+        background-color: #e9ecef;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'fitness_guide_home' %}" class="btn btn-outline-primary">← 返回健身指南</a>
+        </div>
+
+        <div class="jumbotron bg-light p-4 mb-4">
+            <h1 class="display-4">{{ title }}</h1>
+            <p class="lead">熟悉健身房常见器材的使用方法，选择你要学习的器材类别：</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for cat in categories %}
+    <div class="col-md-4">
+        <div class="card module-card">
+            <div class="card-body">
+                <h5 class="card-title">{{ cat.name }}</h5>
+                <p class="card-text">{{ cat.description }}</p>
+                <a href="{% url 'equipment_list' cat.key %}" class="btn btn-primary">进入学习</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

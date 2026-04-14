@@ -1,0 +1,52 @@
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ equipment.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'equipment_list' equipment.category %}" class="btn btn-outline-primary">← 返回器材列表</a>
+        </div>
+
+        <div class="card">
+            <div class="row no-gutters">
+                <div class="col-md-6">
+                    {% if equipment.image %}
+                    <img src="{{ equipment.image.url }}" class="card-img" alt="{{ equipment.name }}">
+                    {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 400px; background-color: #e9ecef;">
+                        <span class="text-muted">暂无图片</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ equipment.name }}</h2>
+                        <p class="card-text">
+                            <span class="badge badge-info">{{ equipment.get_category_display }}</span>
+                        </p>
+                        {% if equipment.description %}
+                        <p class="card-text">{{ equipment.description }}</p>
+                        {% endif %}
+                        {% if equipment.video_url %}
+                        <div class="mt-4">
+                            <h5>教学视频</h5>
+                            <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-danger">
+                                <i class="fas fa-play"></i> 观看视频
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <div class="mt-4">
+                            <a href="{% url 'equipment_update' equipment.category equipment.id %}" class="btn btn-warning">编辑</a>
+                            <a href="{% url 'equipment_delete' equipment.category equipment.id %}" class="btn btn-danger">删除</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

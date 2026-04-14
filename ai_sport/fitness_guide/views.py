@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponseForbidden
+from .models import Equipment
 
 def fitness_guide_home(request):
     """健身前你该知道的主页面"""
@@ -57,21 +60,110 @@ def muscle_knowledge(request):
 
 def equipment_knowledge(request):
     """器材认识页面"""
+    categories = [
+        {
+            'key': 'cardio',
+            'name': '有氧器材',
+            'description': '跑步机、椭圆机、动感单车等，主要用于提高心肺功能和燃烧脂肪。使用时注意姿势正确，避免关节损伤。'
+        },
+        {
+            'key': 'strength',
+            'name': '力量训练器材',
+            'description': '包括杠铃、哑铃、史密斯机、龙门架等，用于增强肌肉力量和耐力。初学者应从轻重量开始，掌握正确动作。'
+        },
+        {
+            'key': 'functional',
+            'name': '功能性训练器材',
+            'description': 'TRX悬挂训练带、壶铃、战绳等，用于提高身体协调性、平衡性和核心力量。适合有一定基础的人群。'
+        }
+    ]
     context = {
         'title': '器材认识',
-        'sections': [
-            {
-                'title': '有氧器材',
-                'content': '跑步机、椭圆机、动感单车等，主要用于提高心肺功能和燃烧脂肪。使用时注意姿势正确，避免关节损伤。'
-            },
-            {
-                'title': '力量训练器材',
-                'content': '包括杠铃、哑铃、史密斯机、龙门架等，用于增强肌肉力量和耐力。初学者应从轻重量开始，掌握正确动作。'
-            },
-            {
-                'title': '功能性训练器材',
-                'content': 'TRX悬挂训练带、壶铃、战绳等，用于提高身体协调性、平衡性和核心力量。适合有一定基础的人群。'
-            }
-        ]
+        'categories': categories
     }
-    return render(request, 'fitness_guide/detail.html', context)
+    return render(request, 'fitness_guide/equipment_home.html', context)
+
+def equipment_list(request, category):
+    """按类别显示器材列表"""
+    category_names = {
+        'cardio': '有氧器材',
+        'strength': '力量训练器材',
+        'functional': '功能性训练器材'
+    }
+    equipment_list = Equipment.objects.filter(category=category)
+    context = {
+        'title': category_names.get(category, '器材列表'),
+        'category': category,
+        'equipment_list': equipment_list,
+    }
+    return render(request, 'fitness_guide/equipment_list.html', context)
+
+def equipment_detail(request, category, equipment_id):
+    """器材详情页面"""
+    equipment = get_object_or_404(Equipment, id=equipment_id, category=category)
+    context = {
+        'equipment': equipment,
+    }
+    return render(request, 'fitness_guide/equipment_detail.html', context)
+
+@staff_member_required
+def equipment_create(request, category):
+    """添加器材（仅管理员）"""
+    category_names = {
+        'cardio': '有氧器材',
+        'strength': '力量训练器材',
+        'functional': '功能性训练器材'
+    }
+    if request.method == 'POST':
+        from .forms import EquipmentForm
+        form = EquipmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            equipment = form.save(commit=False)
+            equipment.category = category
+            equipment.save()
+            return redirect('equipment_list', category=category)
+    else:
+        form = EquipmentForm(initial={'category': category})
+
+    context = {
+        'title': f'添加{category_names.get(category, "器材")}',
+        'form': form,
+        'category': category,
+    }
+    return render(request, 'fitness_guide/equipment_form.html', context)
+
+@staff_member_required
+def equipment_update(request, category, equipment_id):
+    """更新器材（仅管理员）"""
+    equipment = get_object_or_404(Equipment, id=equipment_id, category=category)
+    if request.method == 'POST':
+        from .forms import EquipmentForm
+        form = EquipmentForm(request.POST, request.FILES, instance=equipment)
+        if form.is_valid():
+            form.save()
+            return redirect('equipment_detail', category=category, equipment_id=equipment_id)
+    else:
+        form = EquipmentForm(instance=equipment)
+
+    context = {
+        'title': f'编辑器材 - {equipment.name}',
+        'form': form,
+        'equipment': equipment,
+        'category': category,
+    }
+    return render(request, 'fitness_guide/equipment_form.html', context)
+
+@staff_member_required
+def equipment_delete(request, category, equipment_id):
+    """删除器材（仅管理员）"""
+    equipment = get_object_or_404(Equipment, id=equipment_id, category=category)
+    if request.method == 'POST':
+        equipment.delete()
+        return redirect('equipment_list', category=category)
+
+    context = {
+        'title': f'删除器材 - {equipment.name}',
+        'equipment': equipment,
+        'category': category,
+    }
+    return render(request, 'fitness_guide/equipment_confirm_delete.html', context)
