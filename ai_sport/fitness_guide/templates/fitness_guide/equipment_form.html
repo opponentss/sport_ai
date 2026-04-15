@@ -1,44 +1,83 @@
+<!--
+    器材添加/编辑表单页模板
+
+    本页面用于添加新器材或编辑现有器材信息。
+    表单支持文件上传（图片）和URL输入（视频链接）。
+
+    表单字段：
+    - name: 器材名称
+    - category: 器材类别
+    - image: 器材图片（支持JPG/PNG）
+    - video_url: 视频链接
+    - description: 器材描述
+
+    后端传递的上下文变量：
+    - title: 页面标题
+    - form: EquipmentForm 表单实例
+    - category: 当前类别标识符
+-->
 {% extends 'fitness_guide/base.html' %}
 
+<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
+        <!-- 返回按钮 -->
         <div class="back-btn">
             <a href="{% url 'equipment_list' category %}" class="btn btn-outline-primary">← 返回器材列表</a>
         </div>
 
+        <!-- 表单卡片 -->
         <div class="card">
+            <!-- 卡片头部 -->
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">{{ title }}</h4>
             </div>
+
             <div class="card-body">
+                <!-- 表单开始，enctype 支持文件上传 -->
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+
+                    <!-- 器材名称字段 -->
                     <div class="form-group">
                         <label for="id_name">器材名称</label>
                         {{ form.name }}
                     </div>
+
+                    <!-- 器材类别字段 -->
                     <div class="form-group">
                         <label for="id_category">器材类别</label>
                         {{ form.category }}
                     </div>
+
+                    <!-- 器材图片字段 -->
                     <div class="form-group">
                         <label for="id_image">器材图片</label>
                         {{ form.image }}
+                        <!-- 图片格式提示 -->
                         <small class="form-text text-muted">支持 JPG、PNG 格式的图片</small>
                     </div>
+
+                    <!-- 视频链接字段 -->
                     <div class="form-group">
                         <label for="id_video_url">视频链接</label>
                         {{ form.video_url }}
+                        <!-- 链接格式提示 -->
                         <small class="form-text text-muted">例如: https://youtube.com/watch?v=...</small>
                     </div>
+
+                    <!-- 器材描述字段 -->
                     <div class="form-group">
                         <label for="id_description">器材描述</label>
                         {{ form.description }}
                     </div>
+
+                    <!-- 提交按钮 -->
                     <button type="submit" class="btn btn-success">保存</button>
+                    <!-- 取消按钮 -->
                     <a href="{% url 'equipment_list' category %}" class="btn btn-secondary">取消</a>
                 </form>
             </div>

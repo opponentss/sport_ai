@@ -1,0 +1,120 @@
+<!--
+    饮食建议详情页模板
+
+    本页面显示单条饮食建议的完整内容，包括配图、标题、详细内容、视频链接等。
+    采用不同于器材详情页的布局，使用全宽图文混排样式。
+
+    页面布局：
+    - 顶部大图区域（横向全宽）
+    - 下方为内容区域
+    - 右下角为管理员操作按钮
+
+    后端传递的上下文变量：
+    - diet_item: DietItem 模型实例
+-->
+{% extends 'fitness_guide/base.html' %}
+
+<!-- 页面标题 -->
+{% block title %}{{ diet_item.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- 返回按钮 -->
+        <div class="back-btn">
+            <a href="{% url 'diet_list' diet_item.category %}" class="btn btn-outline-success">← 返回列表</a>
+        </div>
+    </div>
+</div>
+
+<!-- 详情卡片 -->
+<div class="card">
+    <!-- 配图区域（横向全宽） -->
+    {% if diet_item.image %}
+    <div class="card-img-top text-center bg-light">
+        <img src="{{ diet_item.image.url }}" alt="{{ diet_item.title }}"
+             style="max-height: 400px; object-fit: contain;">
+    </div>
+    {% endif %}
+
+    <!-- 内容区域 -->
+    <div class="card-body">
+        <!-- 标题和类别标签 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">{{ diet_item.title }}</h2>
+                <span class="badge badge-success">{{ diet_item.get_category_display }}</span>
+                {% if diet_item.is_featured %}
+                <span class="badge badge-warning ml-2">精选推荐</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- 详细内容 -->
+        <div class="diet-content mt-4">
+            <p class="lead">{{ diet_item.content|linebreaks }}</p>
+        </div>
+
+        <!-- 视频链接区域 -->
+        {% if diet_item.video_url %}
+        <div class="mt-5 p-4 bg-danger text-white rounded">
+            <h5>📺 相关视频教程</h5>
+            <p class="mb-2">点击下方按钮观看详细视频讲解：</p>
+            <a href="{{ diet_item.video_url }}" target="_blank" class="btn btn-light">
+                ▶ 立即观看
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- 管理员操作按钮 -->
+        {% if user.is_staff %}
+        <div class="mt-4 border-top pt-4">
+            <p class="text-muted mb-2">管理员操作：</p>
+            <div class="btn-group">
+                <a href="{% url 'diet_update' diet_item.category diet_item.id %}" class="btn btn-warning">编辑建议</a>
+                <a href="{% url 'diet_delete' diet_item.category diet_item.id %}" class="btn btn-outline-danger">删除</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 相关推荐（同类别的其他建议） -->
+{% with related_items=diet_item.category|get_related_diet_items %}
+{% if related_items %}
+<div class="row mt-5">
+    <div class="col-12">
+        <h4>相关推荐</h4>
+        <div class="row">
+            {% for related in related_items %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    {% if related.image %}
+                    <img src="{{ related.image.url }}" class="card-img-top" alt="{{ related.title }}"
+                         style="height: 150px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h6 class="card-title">{{ related.title }}</h6>
+                        <a href="{% url 'diet_detail' related.category related.id %}" class="btn btn-sm btn-success">查看</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endwith %}
+
+<style>
+    .diet-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+    .diet-content p {
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}

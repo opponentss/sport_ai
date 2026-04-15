@@ -1,3 +1,24 @@
+<!--
+    餐饮记录表单页模板
+
+    本页面用于添加或编辑餐饮记录。
+    支持图片上传和 AI 食物识别分析功能。
+
+    表单字段：
+    - meal_type: 餐食类型（早餐/午餐/晚餐）
+    - date: 用餐日期
+    - time: 用餐时间
+    - image: 餐食图片
+    - description: 餐食描述
+    - calories: 卡路里摄入
+
+    页面功能：
+    - 支持图片上传
+    - 提供 AI 分析按钮（预留功能）
+
+    后端传递的上下文变量：
+    - form: MealForm 表单实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -5,62 +26,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>添加/编辑三餐记录</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- 引入 jQuery 库，用于 AI 分析功能 -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
         <h1>添加/编辑三餐记录</h1>
+
+        <!-- 餐饮表单，支持文件上传 -->
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
+
+            <!-- 餐食类型 -->
             <div class="form-group">
                 {{ form.meal_type.label_tag }} {{ form.meal_type }}
             </div>
+
+            <!-- 用餐日期 -->
             <div class="form-group">
                 {{ form.date.label_tag }} {{ form.date }}
             </div>
+
+            <!-- 用餐时间 -->
             <div class="form-group">
                 {{ form.time.label_tag }} {{ form.time }}
             </div>
+
+            <!-- 餐食图片 -->
             <div class="form-group">
                 {{ form.image.label_tag }} {{ form.image }}
             </div>
+
+            <!-- 餐食描述，带 AI 分析按钮 -->
             <div class="form-group">
                 {{ form.description.label_tag }}
                 <div class="input-group">
                     {{ form.description }}
                     <div class="input-group-append">
+                        <!-- AI 分析按钮 -->
                         <button type="button" id="ai-analyze-btn" class="btn btn-info">AI 分析</button>
                     </div>
                 </div>
             </div>
+
+            <!-- 卡路里 -->
             <div class="form-group">
                 {{ form.calories.label_tag }} {{ form.calories }}
             </div>
+
+            <!-- 提交按钮 -->
             <button type="submit" class="btn btn-primary">保存</button>
+            <!-- 取消按钮 -->
             <a href="{% url 'meal_list' %}" class="btn btn-secondary">取消</a>
         </form>
     </div>
+
+    <!-- AI 分析功能脚本 -->
     <script>
         $(document).ready(function() {
+            // AI 分析按钮点击事件
             $('#ai-analyze-btn').click(function() {
                 // 检查是否上传了图片
                 if ($('#id_image').val() === '') {
                     alert('请先上传食物图片');
                     return;
                 }
-                
+
                 // 显示加载状态
                 $('#ai-analyze-btn').text('分析中...').prop('disabled', true);
-                
-                // 模拟 AI 分析过程
+
+                // 模拟 AI 分析过程（实际应调用后端 API）
                 setTimeout(function() {
                     // 填充模拟数据
                     $('#id_description').val('米饭; 鸡蛋; 青菜');
                     $('#id_calories').val('223');
-                    
+
                     // 恢复按钮状态
                     $('#ai-analyze-btn').text('AI 分析').prop('disabled', false);
-                    
+
                     // 提示用户
                     alert('AI 分析完成，已自动填充食物信息和卡路里');
                 }, 1000);

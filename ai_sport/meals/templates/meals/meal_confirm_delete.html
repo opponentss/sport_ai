@@ -1,3 +1,12 @@
+<!--
+    餐饮记录删除确认页模板
+
+    本页面用于确认删除餐饮记录操作，防止误删。
+    显示要删除的餐食类型，确认后执行删除。
+
+    后端传递的上下文变量：
+    - meal: 要删除的 Meal 模型实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,7 +18,11 @@
 <body>
     <div class="container mt-5">
         <h1>确认删除</h1>
+
+        <!-- 删除确认提示 -->
         <p>确定要删除三餐记录：{{ meal.get_meal_type_display }} 吗？</p>
+
+        <!-- 删除表单 -->
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">删除</button>

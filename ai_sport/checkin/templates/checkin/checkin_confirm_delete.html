@@ -1,3 +1,12 @@
+<!--
+    打卡记录删除确认页模板
+
+    本页面用于确认删除打卡记录操作，防止误删。
+    显示器材名称，确认后执行删除。
+
+    后端传递的上下文变量：
+    - checkin: 要删除的 Checkin 模型实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,11 +17,18 @@
 </head>
 <body>
     <div class="container mt-5">
+        <!-- 页面标题 -->
         <h1>确认删除</h1>
+
+        <!-- 删除确认提示 -->
         <p>确定要删除打卡记录：{{ checkin.activity }} 吗？</p>
+
+        <!-- 删除表单 -->
         <form method="post">
             {% csrf_token %}
+            <!-- 确认删除按钮 -->
             <button type="submit" class="btn btn-danger">删除</button>
+            <!-- 取消按钮 -->
             <a href="{% url 'checkin_list' %}" class="btn btn-secondary">取消</a>
         </form>
     </div>

@@ -1,0 +1,91 @@
+<!--
+    肌肉部位详情模板
+
+    本页面显示单条肌肉部位的完整信息。
+    采用不同于器材详情页的布局：
+
+    页面布局：
+    - 顶部：肌肉名称和拉丁学名
+    - 中部：肌肉图片
+    - 下部：详细描述和训练要点
+    - 右下角：视频链接和管理员操作
+-->
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ muscle_item.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'muscle_group_list' muscle_item.muscle_group.id %}"
+               class="btn btn-outline-warning">← 返回列表</a>
+        </div>
+    </div>
+</div>
+
+<!-- 详情卡片 -->
+<div class="card">
+    <!-- 肌肉图片 -->
+    {% if muscle_item.image %}
+    <div class="card-img-top text-center bg-light">
+        <img src="{{ muscle_item.image.url }}" alt="{{ muscle_item.name }}"
+             style="max-height: 350px; object-fit: contain;">
+    </div>
+    {% endif %}
+
+    <div class="card-body">
+        <!-- 标题区域 -->
+        <div class="mb-4">
+            <h2>{{ muscle_item.name }}</h2>
+            {% if muscle_item.latin_name %}
+            <p class="text-muted h5">{{ muscle_item.latin_name }}</p>
+            {% endif %}
+            <span class="badge badge-warning">{{ muscle_item.muscle_group.name }}</span>
+            {% if muscle_item.is_featured %}
+            <span class="badge badge-danger">重点肌肉</span>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <!-- 详细描述 -->
+        <div class="mt-4">
+            <h4 class="text-warning">📖 肌肉介绍</h4>
+            <p class="lead">{{ muscle_item.description|linebreaks }}</p>
+        </div>
+
+        <!-- 训练要点 -->
+        {% if muscle_item.training_tips %}
+        <div class="mt-4 p-4 bg-light rounded">
+            <h4 class="text-warning">💪 训练要点</h4>
+            <p>{{ muscle_item.training_tips|linebreaks }}</p>
+        </div>
+        {% endif %}
+
+        <!-- 视频链接 -->
+        {% if muscle_item.video_url %}
+        <div class="mt-4 p-4 bg-danger text-white rounded">
+            <h5>🎬 训练视频</h5>
+            <p>观看专业教练的演示和指导：</p>
+            <a href="{{ muscle_item.video_url }}" target="_blank" class="btn btn-light">
+                ▶ 立即观看
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- 管理员操作 -->
+        {% if user.is_staff %}
+        <div class="mt-4 border-top pt-4">
+            <p class="text-muted mb-2">管理员操作：</p>
+            <div class="btn-group">
+                <a href="{% url 'muscle_item_update' muscle_item.muscle_group.id muscle_item.id %}"
+                   class="btn btn-warning">编辑</a>
+                <a href="{% url 'muscle_item_delete' muscle_item.muscle_group.id muscle_item.id %}"
+                   class="btn btn-outline-danger">删除</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

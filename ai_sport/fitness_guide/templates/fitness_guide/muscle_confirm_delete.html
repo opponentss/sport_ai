@@ -1,0 +1,52 @@
+<!--
+    肌肉部位删除确认模板
+
+    用于确认删除肌肉部位。
+-->
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'muscle_detail' muscle_item.muscle_group.id muscle_item.id %}"
+               class="btn btn-outline-warning">← 返回详情</a>
+        </div>
+
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">⚠️ 确认删除</h4>
+            </div>
+
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <strong>警告：</strong> 此操作无法撤销！
+                </div>
+
+                <p class="lead">确定要删除以下肌肉部位吗？</p>
+
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        <h5>{{ muscle_item.name }}</h5>
+                        {% if muscle_item.latin_name %}
+                        <p class="text-muted mb-0">{{ muscle_item.latin_name }}</p>
+                        {% endif %}
+                        <p class="mb-0">所属：{{ muscle_item.muscle_group.name }}</p>
+                    </div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-danger">确认删除</button>
+                        <a href="{% url 'muscle_detail' muscle_item.muscle_group.id muscle_item.id %}"
+                           class="btn btn-secondary">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

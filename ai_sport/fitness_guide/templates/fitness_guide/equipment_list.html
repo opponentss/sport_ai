@@ -1,16 +1,38 @@
+<!--
+    器材列表页模板
+
+    本页面按类别显示所有器材的卡片列表。
+    支持管理员添加器材，普通用户仅可浏览。
+
+    页面功能：
+    - 显示该类别下的所有器材
+    - 每个器材卡片显示图片、名称、描述和视频链接
+    - 管理员可见"添加器材"按钮
+    - 点击卡片进入器材详情页
+
+    后端传递的上下文变量：
+    - title: 页面标题（类别名称）
+    - category: 类别标识符
+    - equipment_list: 该类别下的器材查询集
+-->
 {% extends 'fitness_guide/base.html' %}
 
+<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
+        <!-- 返回按钮 -->
         <div class="back-btn">
             <a href="{% url 'equipment_knowledge' %}" class="btn btn-outline-primary">← 返回器材分类</a>
         </div>
 
+        <!-- 页面标题区域 -->
         <div class="jumbotron bg-light p-4 mb-4">
             <h1 class="display-4">{{ title }}</h1>
+
+            <!-- 仅管理员可见"添加器材"按钮 -->
             {% if user.is_staff %}
             <a href="{% url 'equipment_create' category %}" class="btn btn-success">+ 添加器材</a>
             {% endif %}
@@ -18,32 +40,47 @@
     </div>
 </div>
 
+<!-- 器材列表区域 -->
 <div class="row">
     {% if equipment_list %}
+        <!-- 遍历器材列表 -->
         {% for equipment in equipment_list %}
         <div class="col-md-4 mb-4">
             <div class="card equipment-card">
+                <!-- 器材图片区域 -->
                 {% if equipment.image %}
+                <!-- 有图片时显示图片 -->
                 <img src="{{ equipment.image.url }}" class="card-img-top equipment-img" alt="{{ equipment.name }}">
                 {% else %}
+                <!-- 无图片时显示占位符 -->
                 <div class="card-img-top equipment-img-placeholder d-flex align-items-center justify-content-center">
                     <span class="text-muted">暂无图片</span>
                 </div>
                 {% endif %}
+
+                <!-- 器材信息区域 -->
                 <div class="card-body">
+                    <!-- 器材名称 -->
                     <h5 class="card-title">{{ equipment.name }}</h5>
+
+                    <!-- 器材描述（截断显示） -->
                     {% if equipment.description %}
                     <p class="card-text">{{ equipment.description|truncatewords:20 }}</p>
                     {% endif %}
+
+                    <!-- 视频链接按钮 -->
                     {% if equipment.video_url %}
                     <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-info btn-sm">观看视频</a>
                     {% endif %}
+
+                    <!-- 查看详情按钮 -->
                     <a href="{% url 'equipment_detail' category equipment.id %}" class="btn btn-primary">查看详情</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     {% else %}
+        <!-- 无器材数据时显示提示信息 -->
         <div class="col-12">
             <div class="alert alert-info">
                 暂无器材信息{% if user.is_staff %}，点击"添加器材"开始添加{% endif %}
@@ -52,16 +89,22 @@
     {% endif %}
 </div>
 
+<!-- 器材卡片样式 -->
 <style>
+    /* 卡片样式：撑满高度，无边框，带阴影 */
     .equipment-card {
         height: 100%;
         border: none;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
+    /* 器材图片样式：固定高度，图片填充方式 */
     .equipment-img {
         height: 200px;
         object-fit: cover;
     }
+
+    /* 图片占位符样式 */
     .equipment-img-placeholder {
         height: 200px;
         background-color: #e9ecef;

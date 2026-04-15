@@ -1,62 +1,118 @@
+<!--
+    健身指南模块基础模板
+
+    本模板是健身指南模块的所有页面的父模板，定义了统一的页面结构和样式。
+    包含导航栏、内容区域，使用 Bootstrap 4 框架实现响应式布局。
+
+    子模板可以通过覆写以下 block 来定制内容：
+    - title: 页面标题
+    - content: 页面主体内容
+
+    样式说明：
+    - 使用 Bootstrap 4 的 card 组件实现卡片效果
+    - module-card: 模块卡片样式，带有悬浮上移效果
+    - section-card: 内容区块卡片样式，左侧带有蓝色边框
+    - back-btn: 返回按钮样式
+
+    导航栏说明：
+    - 左侧：健身打卡品牌名称，点击返回首页
+    - 中间：健身指南模块入口链接
+    - 右侧：根据用户登录状态显示不同内容
+        - 已登录：显示用户名和退出登录按钮
+        - 未登录：显示登录按钮
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- 字符编码设置为 UTF-8，支持中文显示 -->
     <meta charset="UTF-8">
+    <!-- 响应式视口设置，确保移动设备正确渲染 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面标题，使用 block 允许子模板自定义 -->
     <title>{% block title %}健身前你该知道的{% endblock %}</title>
+
+    <!-- 引入 Bootstrap 4 CSS 样式库，提供响应式布局和UI组件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- 自定义页面样式 -->
     <style>
+        /* 页面背景色设置为浅灰色 */
         body {
             background-color: #f8f9fa;
         }
+
+        /* 导航栏阴影效果，增加层次感 */
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        /* 模块卡片样式 */
         .module-card {
             margin-bottom: 20px;
+            /* 悬浮动画效果：300ms缓动过渡 */
             transition: transform 0.3s ease;
             border: none;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
+        /* 模块卡片悬浮效果：向上移动5px并加深阴影 */
         .module-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
+
+        /* 内容区块卡片样式，左侧带有蓝色边框 */
         .section-card {
             margin-bottom: 25px;
             border-left: 4px solid #007bff;
         }
+
+        /* 返回按钮样式 */
         .back-btn {
             margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
+    <!-- 导航栏：固定在页面顶部，深蓝色背景 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
+            <!-- 品牌标识，点击返回首页 -->
             <a class="navbar-brand" href="{% url 'home' %}">健身打卡</a>
+
+            <!-- 移动端折叠菜单按钮 -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- 导航链接区域 -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
+                    <!-- 首页链接 -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">首页</a>
                     </li>
+
+                    <!-- 健身指南模块链接 -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'fitness_guide_home' %}">健身前你该知道的</a>
                     </li>
+
+                    <!-- 根据用户登录状态显示不同内容 -->
                     {% if user.is_authenticated %}
+                        <!-- 已登录状态：显示用户名和退出按钮 -->
                         <li class="nav-item">
                             <span class="navbar-text text-white mr-3">欢迎, {{ user.username }}</span>
                         </li>
                         <li class="nav-item">
+                            <!-- 退出登录表单，使用POST方法防止CSRF攻击 -->
                             <form method="post" action="{% url 'logout' %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-light btn-sm">退出登录</button>
                             </form>
                         </li>
                     {% else %}
+                        <!-- 未登录状态：显示登录按钮 -->
                         <li class="nav-item">
                             <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
                         </li>
@@ -66,12 +122,17 @@
         </div>
     </nav>
 
+    <!-- 主内容区域容器，上下margin为4个单位 -->
     <div class="container mt-4">
-        {% block content %}{% endblock %}
+        <!-- 内容block，子模板需要在此位置覆写 -->
+        {% block content %}<!-- 子模板的内容会替换这里 -->{% endblock %}
     </div>
 
+    <!-- 引入 jQuery 库（Bootstrap JS 依赖） -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- 引入 Popper.js 库（Bootstrap JS 依赖，用于工具提示和弹出框） -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- 引入 Bootstrap 4 JS 库，提供交互功能 -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

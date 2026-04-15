@@ -1,3 +1,17 @@
+<!--
+    餐饮记录列表页模板
+
+    本页面以卡片形式显示用户的所有餐饮记录。
+    每个卡片包含餐食图片、类型、日期时间、描述和卡路里信息。
+
+    页面功能：
+    - 以卡片网格形式展示餐饮记录
+    - 支持图片显示
+    - 提供编辑和删除操作
+
+    后端传递的上下文变量：
+    - meals: Meal 模型查询集，包含用户的餐饮记录
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,27 +22,39 @@
 </head>
 <body>
     <div class="container mt-5">
+        <!-- 页面标题 -->
         <h1>三餐记录</h1>
+
+        <!-- 按钮区域 -->
         <div class="mb-3">
             <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
             <a href="{% url 'meal_create' %}" class="btn btn-primary">添加三餐记录</a>
         </div>
+
+        <!-- 餐饮记录卡片网格 -->
         <div class="row">
-            {% for meal in meals %}  
+            {% for meal in meals %}
             <div class="col-md-4 mb-4">
                 <div class="card">
+                    <!-- 餐食图片 -->
                     {% if meal.image %}
                     <img src="{{ meal.image.url }}" class="card-img-top" alt="{{ meal.get_meal_type_display }}">
                     {% endif %}
+
                     <div class="card-body">
+                        <!-- 餐食类型（早餐/午餐/晚餐） -->
                         <h5 class="card-title">{{ meal.get_meal_type_display }}</h5>
+                        <!-- 日期时间 -->
                         <p class="card-text">{{ meal.date }} {{ meal.time }}</p>
+                        <!-- 餐食描述 -->
                         {% if meal.description %}
                         <p class="card-text">{{ meal.description }}</p>
                         {% endif %}
+                        <!-- 卡路里信息 -->
                         {% if meal.calories %}
                         <p class="card-text">卡路里：{{ meal.calories }}</p>
                         {% endif %}
+                        <!-- 操作按钮 -->
                         <div class="btn-group">
                             <a href="{% url 'meal_update' meal.pk %}" class="btn btn-sm btn-warning">编辑</a>
                             <a href="{% url 'meal_delete' meal.pk %}" class="btn btn-sm btn-danger">删除</a>

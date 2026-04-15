@@ -1,0 +1,61 @@
+<!--
+    肌肉群添加/编辑表单模板
+
+    用于添加新的肌肉群分类。
+-->
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'muscle_home' %}" class="btn btn-outline-warning">← 返回</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">{{ title }}</h4>
+            </div>
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="id_name">肌肉群名称 <span class="text-danger">*</span></label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_latin_name">拉丁学名</label>
+                        {{ form.latin_name }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_category">所属大类 <span class="text-danger">*</span></label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_icon">图标</label>
+                        {{ form.icon }}
+                        <small class="form-text text-muted">输入emoji图标，如：💪、🦵、❤️等</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_description">简要描述</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-warning">保存</button>
+                        <a href="{% url 'muscle_home' %}" class="btn btn-secondary ml-2">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

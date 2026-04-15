@@ -1,19 +1,44 @@
+<!--
+    打卡记录列表页模板
+
+    本页面显示当前用户的所有打卡记录，以表格形式展示。
+    包含活动名称、时长、日期时间、位置等信息。
+
+    页面功能：
+    - 显示所有打卡记录表格
+    - 提供添加打卡按钮
+    - 提供编辑和删除操作按钮
+
+    后端传递的上下文变量：
+    - checkins: Checkin 模型查询集，包含用户的打卡记录
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- 字符编码 -->
     <meta charset="UTF-8">
+    <!-- 响应式视口设置 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 页面标题 -->
     <title>打卡记录</title>
+    <!-- 引入 Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- 主容器，上 margin 为 5 -->
     <div class="container mt-5">
+        <!-- 页面标题 -->
         <h1>打卡记录</h1>
+
+        <!-- 按钮区域：返回主页和添加打卡 -->
         <div class="mb-3">
             <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
             <a href="{% url 'checkin_create' %}" class="btn btn-primary">添加打卡</a>
         </div>
+
+        <!-- 打卡记录表格，使用 Bootstrap 条纹表格样式 -->
         <table class="table table-striped">
+            <!-- 表头 -->
             <thead>
                 <tr>
                     <th>活动</th>
@@ -24,14 +49,22 @@
                     <th>操作</th>
                 </tr>
             </thead>
+
+            <!-- 表格主体：遍历打卡记录 -->
             <tbody>
                 {% for checkin in checkins %}
                 <tr>
+                    <!-- 活动名称 -->
                     <td>{{ checkin.activity }}</td>
+                    <!-- 时长（分钟） -->
                     <td>{{ checkin.duration }}</td>
+                    <!-- 打卡日期 -->
                     <td>{{ checkin.date }}</td>
+                    <!-- 打卡时间 -->
                     <td>{{ checkin.time }}</td>
+                    <!-- 位置（无数据时显示"未记录"） -->
                     <td>{{ checkin.location|default:"未记录" }}</td>
+                    <!-- 操作按钮：编辑和删除 -->
                     <td>
                         <a href="{% url 'checkin_update' checkin.pk %}" class="btn btn-sm btn-warning">编辑</a>
                         <a href="{% url 'checkin_delete' checkin.pk %}" class="btn btn-sm btn-danger">删除</a>

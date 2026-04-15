@@ -1,3 +1,12 @@
+<!--
+    睡眠记录删除确认页模板
+
+    本页面用于确认删除睡眠记录操作，防止误删。
+    显示要删除的记录日期，确认后执行删除。
+
+    后端传递的上下文变量：
+    - sleep_record: 要删除的 SleepRecord 模型实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,7 +18,11 @@
 <body>
     <div class="container mt-5">
         <h1>确认删除</h1>
+
+        <!-- 删除确认提示 -->
         <p>确定要删除作息记录：{{ sleep_record.date }} 吗？</p>
+
+        <!-- 删除表单 -->
         <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">删除</button>

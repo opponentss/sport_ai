@@ -1,3 +1,12 @@
+<!--
+    睡眠记录表单页模板
+
+    本页面用于添加或编辑睡眠记录。
+    表单字段由后端 SleepRecordForm 自动渲染。
+
+    后端传递的上下文变量：
+    - form: SleepRecordForm 表单实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,12 +18,19 @@
 <body>
     <div class="container mt-5">
         <h1>添加/编辑作息记录</h1>
+
+        <!-- 睡眠记录表单 -->
         <form method="post">
             {% csrf_token %}
+
+            <!-- 表单区域 -->
             <div class="form-group">
                 {{ form.as_p }}
             </div>
+
+            <!-- 提交按钮 -->
             <button type="submit" class="btn btn-primary">保存</button>
+            <!-- 取消按钮 -->
             <a href="{% url 'sleep_list' %}" class="btn btn-secondary">取消</a>
         </form>
     </div>

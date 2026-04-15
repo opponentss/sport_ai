@@ -1,45 +1,84 @@
+<!--
+    器材详情页模板
+
+    本页面显示单个器材的详细信息，包括图片、名称、类别、描述和视频链接。
+    管理员可在此页面编辑或删除器材。
+
+    页面布局：
+    - 左侧：器材大图（或占位符）
+    - 右侧：器材详细信息
+
+    后端传递的上下文变量：
+    - equipment: Equipment 模型实例，包含以下字段：
+        - name: 器材名称
+        - category: 器材类别
+        - get_category_display: 类别中文名称
+        - image: 器材图片
+        - description: 器材描述
+        - video_url: 视频链接
+-->
 {% extends 'fitness_guide/base.html' %}
 
+<!-- 页面标题为器材名称 -->
 {% block title %}{{ equipment.name }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
+        <!-- 返回按钮 -->
         <div class="back-btn">
             <a href="{% url 'equipment_list' equipment.category %}" class="btn btn-outline-primary">← 返回器材列表</a>
         </div>
 
+        <!-- 器材详情卡片 -->
         <div class="card">
             <div class="row no-gutters">
+                <!-- 左侧图片区域 -->
                 <div class="col-md-6">
                     {% if equipment.image %}
+                    <!-- 有图片时显示大图 -->
                     <img src="{{ equipment.image.url }}" class="card-img" alt="{{ equipment.name }}">
                     {% else %}
+                    <!-- 无图片时显示占位符 -->
                     <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 400px; background-color: #e9ecef;">
                         <span class="text-muted">暂无图片</span>
                     </div>
                     {% endif %}
                 </div>
+
+                <!-- 右侧信息区域 -->
                 <div class="col-md-6">
                     <div class="card-body">
+                        <!-- 器材名称 -->
                         <h2 class="card-title">{{ equipment.name }}</h2>
+
+                        <!-- 器材类别标签 -->
                         <p class="card-text">
                             <span class="badge badge-info">{{ equipment.get_category_display }}</span>
                         </p>
+
+                        <!-- 器材描述 -->
                         {% if equipment.description %}
                         <p class="card-text">{{ equipment.description }}</p>
                         {% endif %}
+
+                        <!-- 视频链接区域 -->
                         {% if equipment.video_url %}
                         <div class="mt-4">
                             <h5>教学视频</h5>
+                            <!-- 打开新窗口观看视频 -->
                             <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-danger">
                                 <i class="fas fa-play"></i> 观看视频
                             </a>
                         </div>
                         {% endif %}
+
+                        <!-- 管理员操作按钮区域 -->
                         {% if user.is_staff %}
                         <div class="mt-4">
+                            <!-- 编辑按钮 -->
                             <a href="{% url 'equipment_update' equipment.category equipment.id %}" class="btn btn-warning">编辑</a>
+                            <!-- 删除按钮 -->
                             <a href="{% url 'equipment_delete' equipment.category equipment.id %}" class="btn btn-danger">删除</a>
                         </div>
                         {% endif %}

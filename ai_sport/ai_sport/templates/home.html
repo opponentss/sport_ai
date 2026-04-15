@@ -1,55 +1,92 @@
+<!--
+    项目首页模板
+
+    本页面是整个应用的入口页面，展示四大功能模块入口。
+    使用 Bootstrap 栅格系统实现响应式布局。
+
+    功能模块：
+    1. 健身前你该知道的 - 健身基础知识学习
+    2. 打卡记录 - 运动打卡功能
+    3. 三餐记录 - 饮食记录功能
+    4. 作息记录 - 睡眠记录功能
+
+    页面特点：
+    - 顶部导航栏（与健身指南模块风格一致）
+    - 四个功能入口卡片
+    - 卡片悬浮动画效果
+    - 根据用户登录状态显示不同内容
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健身打卡</title>
+    <!-- 引入 Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- 首页专属样式 -->
     <style>
+        /* 卡片悬浮动画效果 */
         .card {
             margin-bottom: 20px;
             transition: transform 0.3s ease;
         }
+
+        /* 卡片悬浮效果 */
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
+
+        /* 卡片内容居中 */
         .card-body {
             text-align: center;
         }
-        .btn-primary {
-            margin-top: 10px;
-        }
+
+        /* 导航栏阴影 */
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
+    <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
+            <!-- 品牌标识 -->
             <a class="navbar-brand" href="{% url 'home' %}">健身打卡</a>
+
+            <!-- 移动端折叠菜单按钮 -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- 导航链接区域 -->
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- 左侧导航链接 -->
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'fitness_guide_home' %}">健身前你该知道的</a>
                     </li>
                 </ul>
+
+                <!-- 右侧用户状态区域 -->
                 <ul class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
+                        <!-- 已登录状态：显示用户名和退出按钮 -->
                         <li class="nav-item">
                             <span class="navbar-text text-white mr-3">欢迎, {{ user.username }}</span>
                         </li>
                         <li class="nav-item">
+                            <!-- 退出登录表单 -->
                             <form method="post" action="{% url 'logout' %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-light btn-sm">退出登录</button>
                             </form>
                         </li>
                     {% else %}
+                        <!-- 未登录状态：显示登录按钮 -->
                         <li class="nav-item">
                             <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
                         </li>
@@ -58,36 +95,15 @@
             </div>
         </div>
     </nav>
+
+    <!-- 主内容区域 -->
     <div class="container mt-5">
+        <!-- 页面主标题 -->
         <h1 class="text-center mb-5">健身打卡</h1>
+
+        <!-- 功能模块卡片区域 -->
         <div class="row">
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">打卡记录</h5>
-                        <p class="card-text">记录你的健身活动，支持定位功能</p>
-                        <a href="{% url 'checkin_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">三餐记录</h5>
-                        <p class="card-text">记录你的饮食情况，支持拍照功能</p>
-                        <a href="{% url 'meal_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">作息记录</h5>
-                        <p class="card-text">记录你的睡眠情况，分析睡眠质量</p>
-                        <a href="{% url 'sleep_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
+            <!-- 模块1：健身前你该知道的 -->
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
@@ -97,8 +113,43 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 模块2：打卡记录 -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">打卡记录</h5>
+                        <p class="card-text">记录你的健身活动，支持定位功能</p>
+                        <a href="{% url 'checkin_list' %}" class="btn btn-primary">进入</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模块3：三餐记录 -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">三餐记录</h5>
+                        <p class="card-text">记录你的饮食情况，支持拍照功能</p>
+                        <a href="{% url 'meal_list' %}" class="btn btn-primary">进入</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 模块4：作息记录 -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">作息记录</h5>
+                        <p class="card-text">记录你的睡眠情况，分析睡眠质量</p>
+                        <a href="{% url 'sleep_list' %}" class="btn btn-primary">进入</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- 引入 Bootstrap JS 依赖 -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

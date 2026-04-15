@@ -1,0 +1,113 @@
+<!--
+    肌肉群部位列表模板
+
+    本页面显示特定肌肉群下的所有肌肉部位。
+    采用不同于器材列表的样式，使用网格卡片布局。
+
+    页面布局：
+    - 顶部：肌肉群名称和描述
+    - 中部：肌肉部位卡片网格
+    - 底部：管理员添加按钮
+-->
+{% extends 'fitness_guide/base.html' %}
+
+{% block title %}{{ muscle_group.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="back-btn">
+            <a href="{% url 'muscle_home' %}" class="btn btn-outline-warning">← 返回肌肉分类</a>
+        </div>
+    </div>
+</div>
+
+<!-- 肌肉群标题区域 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1">
+                            {% if muscle_group.icon %}{{ muscle_group.icon }}{% endif %}
+                            {{ muscle_group.name }}
+                        </h2>
+                        {% if muscle_group.latin_name %}
+                        <p class="text-muted mb-0">{{ muscle_group.latin_name }}</p>
+                        {% endif %}
+                    </div>
+                    {% if user.is_staff %}
+                    <a href="{% url 'muscle_item_create' muscle_group.id %}" class="btn btn-warning">
+                        + 添加部位
+                    </a>
+                    {% endif %}
+                </div>
+                {% if muscle_group.description %}
+                <p class="mt-3 mb-0">{{ muscle_group.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 肌肉部位网格 -->
+<div class="row">
+    {% if muscle_items %}
+        {% for item in muscle_items %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="row no-gutters">
+                    <!-- 图片区域 -->
+                    <div class="col-md-4">
+                        {% if item.image %}
+                        <img src="{{ item.image.url }}" class="card-img h-100" alt="{{ item.name }}"
+                             style="object-fit: cover; min-height: 150px;">
+                        {% else %}
+                        <div class="card-img bg-light d-flex align-items-center justify-content-center"
+                             style="min-height: 150px;">
+                            <span class="text-muted">暂无图片</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 内容区域 -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">{{ item.name }}</h5>
+                                {% if item.is_featured %}
+                                <span class="badge badge-warning">推荐</span>
+                                {% endif %}
+                            </div>
+
+                            {% if item.latin_name %}
+                            <p class="text-muted small">{{ item.latin_name }}</p>
+                            {% endif %}
+
+                            <p class="card-text small">{{ item.description|truncatewords:25 }}</p>
+
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'muscle_detail' muscle_group.id item.id %}"
+                                   class="btn btn-warning">查看详情</a>
+                                {% if item.video_url %}
+                                <a href="{{ item.video_url }}" target="_blank" class="btn btn-outline-danger">
+                                    视频
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                暂无{{ muscle_group.name }}相关数据{% if user.is_staff %}，点击"添加部位"开始创建{% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

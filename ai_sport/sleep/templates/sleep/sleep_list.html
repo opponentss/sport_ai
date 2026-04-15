@@ -1,3 +1,16 @@
+<!--
+    睡眠记录列表页模板
+
+    本页面以表格形式显示用户的所有睡眠记录。
+    包含日期、入睡时间、起床时间、睡眠时长和质量评级。
+
+    页面功能：
+    - 表格展示睡眠记录
+    - 提供添加、编辑、删除操作
+
+    后端传递的上下文变量：
+    - sleep_records: SleepRecord 模型查询集
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,10 +22,14 @@
 <body>
     <div class="container mt-5">
         <h1>作息记录</h1>
+
+        <!-- 按钮区域 -->
         <div class="mb-3">
             <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
             <a href="{% url 'sleep_create' %}" class="btn btn-primary">添加作息记录</a>
         </div>
+
+        <!-- 睡眠记录表格 -->
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -30,7 +47,9 @@
                     <td>{{ sleep_record.date }}</td>
                     <td>{{ sleep_record.sleep_time }}</td>
                     <td>{{ sleep_record.wake_time }}</td>
+                    <!-- 睡眠时长，无数据显示"未记录" -->
                     <td>{{ sleep_record.duration|default:"未记录" }}</td>
+                    <!-- 睡眠质量，显示中文 -->
                     <td>{{ sleep_record.get_quality_display }}</td>
                     <td>
                         <a href="{% url 'sleep_update' sleep_record.pk %}" class="btn btn-sm btn-warning">编辑</a>

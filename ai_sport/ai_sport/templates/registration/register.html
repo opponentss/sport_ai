@@ -1,11 +1,35 @@
+<!--
+    用户注册页面模板
+
+    本页面提供新用户注册功能。
+    使用渐变紫色背景和卡片式布局，与登录页风格统一。
+
+    页面功能：
+    - 用户名输入（必填，最多150字符）
+    - 密码输入（必填，最少8字符）
+    - 确认密码输入（必填，需与密码一致）
+    - 密码验证提示
+    - 错误和成功消息显示
+    - 链接到登录页面
+
+    样式特点：
+    - 渐变背景色（紫色调）
+    - 居中显示的注册卡片
+    - 圆角和阴影效果
+    - 与登录页风格统一
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户注册 - 健身打卡软件</title>
+    <!-- 引入 Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- 注册页面专属样式 -->
     <style>
+        /* 渐变紫色背景 */
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -13,43 +37,44 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* 注册容器 */
         .register-container {
             max-width: 450px;
             width: 100%;
             padding: 20px;
         }
+
+        /* 注册卡片 */
         .register-card {
             background: white;
             border-radius: 15px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
+
+        /* 注册头部 */
         .register-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
-        .register-header h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .register-body {
-            padding: 30px;
-        }
-        .form-group label {
-            font-weight: 500;
-            color: #333;
-        }
+
+        /* 输入框样式 */
         .form-control {
             border-radius: 8px;
             padding: 12px;
             border: 1px solid #ddd;
         }
+
+        /* 输入框聚焦效果 */
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
+
+        /* 注册按钮 */
         .btn-register {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
@@ -61,32 +86,14 @@
             transition: transform 0.2s;
             color: white;
         }
+
+        /* 注册按钮悬浮效果 */
         .btn-register:hover {
             transform: translateY(-2px);
             color: white;
         }
-        .btn-login {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 500;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        .btn-login:hover {
-            background: #e9ecef;
-            border-color: #667eea;
-        }
-        .back-home {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .back-home a {
-            color: white;
-            text-decoration: none;
-        }
+
+        /* 错误提示样式 */
         .error-messages {
             background: #f8d7da;
             border: 1px solid #f5c6cb;
@@ -95,6 +102,8 @@
             margin-bottom: 15px;
             color: #721c24;
         }
+
+        /* 成功提示样式 */
         .success-messages {
             background: #d4edda;
             border: 1px solid #c3e6cb;
@@ -103,31 +112,37 @@
             margin-bottom: 15px;
             color: #155724;
         }
+
+        /* 密码帮助文本 */
         .password-help {
             font-size: 12px;
             color: #6c757d;
             margin-top: 5px;
         }
-        .form-text {
-            font-size: 12px;
-            color: #6c757d;
-        }
     </style>
 </head>
 <body>
+    <!-- 注册容器 -->
     <div class="register-container">
+        <!-- 注册卡片 -->
         <div class="register-card">
+            <!-- 注册头部 -->
             <div class="register-header">
                 <h2>用户注册</h2>
                 <p class="mb-0">创建您的健身打卡账户</p>
             </div>
+
+            <!-- 注册表单区域 -->
             <div class="register-body">
+                <!-- 消息提示区域 -->
                 {% if messages %}
                     {% for message in messages %}
+                        <!-- 错误消息 -->
                         {% if message.tags == 'error' %}
                             <div class="error-messages">
                                 <p>{{ message }}</p>
                             </div>
+                        <!-- 成功消息 -->
                         {% elif message.tags == 'success' %}
                             <div class="success-messages">
                                 <p>{{ message }}</p>
@@ -136,21 +151,25 @@
                     {% endfor %}
                 {% endif %}
 
+                <!-- 注册表单 -->
                 <form method="post">
                     {% csrf_token %}
-                    
+
+                    <!-- 用户名输入 -->
                     <div class="form-group">
                         <label for="id_username">用户名</label>
-                        <input type="text" name="username" class="form-control" id="id_username" 
+                        <input type="text" name="username" class="form-control" id="id_username"
                                required maxlength="150" autofocus
                                placeholder="请输入用户名（最多150个字符）">
                         <small class="form-text">必填。150个字符或更少。只能包含字母、数字和 @/./+/-/_ 字符。</small>
                     </div>
-                    
+
+                    <!-- 密码输入 -->
                     <div class="form-group">
                         <label for="id_password1">密码</label>
-                        <input type="password" name="password1" class="form-control" id="id_password1" 
+                        <input type="password" name="password1" class="form-control" id="id_password1"
                                required placeholder="请输入密码">
+                        <!-- 密码要求提示 -->
                         <div class="password-help">
                             <ul class="mb-0 pl-3">
                                 <li>密码不能与用户名太相似</li>
@@ -160,22 +179,26 @@
                             </ul>
                         </div>
                     </div>
-                    
+
+                    <!-- 确认密码输入 -->
                     <div class="form-group">
                         <label for="id_password2">确认密码</label>
-                        <input type="password" name="password2" class="form-control" id="id_password2" 
+                        <input type="password" name="password2" class="form-control" id="id_password2"
                                required placeholder="请再次输入密码">
                         <small class="form-text">输入与上面相同的密码进行验证。</small>
                     </div>
-                    
+
+                    <!-- 注册按钮 -->
                     <button type="submit" class="btn btn-register mb-3">注 册</button>
-                    
+
+                    <!-- 登录链接 -->
                     <div class="text-center">
                         <p class="mb-2">已有账户？</p>
                         <a href="{% url 'login' %}" class="btn btn-login">前往登录</a>
                     </div>
                 </form>
-                
+
+                <!-- 返回首页链接 -->
                 <div class="text-center mt-3">
                     <a href="{% url 'home' %}" class="text-muted">返回首页</a>
                 </div>

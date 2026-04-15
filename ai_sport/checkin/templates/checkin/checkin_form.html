@@ -1,3 +1,12 @@
+<!--
+    打卡记录表单页模板
+
+    本页面用于添加新打卡记录或编辑现有打卡记录。
+    表单字段由后端 CheckinForm 自动渲染。
+
+    后端传递的上下文变量：
+    - form: CheckinForm 表单实例
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,13 +17,21 @@
 </head>
 <body>
     <div class="container mt-5">
+        <!-- 页面标题 -->
         <h1>添加/编辑打卡</h1>
+
+        <!-- 打卡表单，使用 POST 方法提交 -->
         <form method="post">
             {% csrf_token %}
+
+            <!-- 表单区域，Django 会渲染所有字段 -->
             <div class="form-group">
                 {{ form.as_p }}
             </div>
+
+            <!-- 提交按钮 -->
             <button type="submit" class="btn btn-primary">保存</button>
+            <!-- 取消按钮 -->
             <a href="{% url 'checkin_list' %}" class="btn btn-secondary">取消</a>
         </form>
     </div>
