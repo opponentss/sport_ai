@@ -1,8 +1,3 @@
-<!--
-    肌肉部位添加/编辑表单模板
-
-    用于添加或编辑肌肉部位的详细信息。
--->
 {% extends 'fitness_guide/base.html' %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -11,12 +6,12 @@
 <div class="row">
     <div class="col-12">
         <div class="back-btn">
-            <a href="{% url 'muscle_group_list' muscle_group.id %}" class="btn btn-outline-warning">← 返回</a>
+            <a href="{% url 'muscle_group_list' muscle_group.id %}" class="btn btn-outline-primary">← 返回</a>
         </div>
 
-        <div class="card">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">{{ title }}</h4>
+        <div class="glass-card">
+            <div class="card-header" style="background: rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h4 class="mb-0" style="color: #fff;">{{ title }}</h4>
             </div>
 
             <div class="card-body">
@@ -25,57 +20,55 @@
 
                     {% if not muscle_item %}
                     <div class="form-group">
-                        <label for="id_muscle_group">所属肌肉群 <span class="text-danger">*</span></label>
+                        <label for="id_muscle_group" style="color: rgba(255,255,255,0.95);">所属肌肉群 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.muscle_group }}
                     </div>
                     {% endif %}
 
                     <div class="form-group">
-                        <label for="id_name">肌肉部位名称 <span class="text-danger">*</span></label>
+                        <label for="id_name" style="color: rgba(255,255,255,0.95);">肌肉部位名称 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.name }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_latin_name">拉丁学名</label>
+                        <label for="id_latin_name" style="color: rgba(255,255,255,0.95);">拉丁学名</label>
                         {{ form.latin_name }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_image">肌肉图片</label>
+                        <label for="id_image" style="color: rgba(255,255,255,0.95);">肌肉图片</label>
                         {{ form.image }}
-                        <small class="form-text text-muted">上传肌肉部位的图片</small>
+                        <small class="form-text" style="color: rgba(255,255,255,0.6);">上传肌肉部位的图片</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="id_video_url">视频链接</label>
+                        <label for="id_video_url" style="color: rgba(255,255,255,0.95);">视频链接</label>
                         {{ form.video_url }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_description">详细描述 <span class="text-danger">*</span></label>
+                        <label for="id_description" style="color: rgba(255,255,255,0.95);">详细描述 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.description }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_training_tips">训练要点</label>
+                        <label for="id_training_tips" style="color: rgba(255,255,255,0.95);">训练要点</label>
                         {{ form.training_tips }}
                     </div>
 
                     <div class="form-group form-check">
                         {{ form.is_featured }}
-                        <label class="form-check-label" for="id_is_featured">
+                        <label class="form-check-label" for="id_is_featured" style="color: rgba(255,255,255,0.9);">
                             推荐显示
                         </label>
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-warning">保存</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
                         {% if muscle_item %}
-                        <a href="{% url 'muscle_detail' muscle_item.muscle_group.id muscle_item.id %}"
-                           class="btn btn-secondary ml-2">取消</a>
+                        <a href="{% url 'muscle_detail' muscle_item.muscle_group.id muscle_item.id %}" class="btn btn-outline-secondary ml-2">取消</a>
                         {% else %}
-                        <a href="{% url 'muscle_group_list' muscle_group.id %}"
-                           class="btn btn-secondary ml-2">取消</a>
+                        <a href="{% url 'muscle_group_list' muscle_group.id %}" class="btn btn-outline-secondary ml-2">取消</a>
                         {% endif %}
                     </div>
                 </form>

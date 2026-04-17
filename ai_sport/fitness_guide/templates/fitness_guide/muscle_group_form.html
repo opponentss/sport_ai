@@ -1,8 +1,3 @@
-<!--
-    肌肉群添加/编辑表单模板
-
-    用于添加新的肌肉群分类。
--->
 {% extends 'fitness_guide/base.html' %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -11,12 +6,12 @@
 <div class="row">
     <div class="col-12">
         <div class="back-btn">
-            <a href="{% url 'muscle_home' %}" class="btn btn-outline-warning">← 返回</a>
+            <a href="{% url 'muscle_home' %}" class="btn btn-outline-primary">← 返回</a>
         </div>
 
-        <div class="card">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">{{ title }}</h4>
+        <div class="glass-card">
+            <div class="card-header" style="background: rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h4 class="mb-0" style="color: #fff;">{{ title }}</h4>
             </div>
 
             <div class="card-body">
@@ -24,34 +19,34 @@
                     {% csrf_token %}
 
                     <div class="form-group">
-                        <label for="id_name">肌肉群名称 <span class="text-danger">*</span></label>
+                        <label for="id_name" style="color: rgba(255,255,255,0.95);">肌肉群名称 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.name }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_latin_name">拉丁学名</label>
+                        <label for="id_latin_name" style="color: rgba(255,255,255,0.95);">拉丁学名</label>
                         {{ form.latin_name }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_category">所属大类 <span class="text-danger">*</span></label>
+                        <label for="id_category" style="color: rgba(255,255,255,0.95);">所属大类 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.category }}
                     </div>
 
                     <div class="form-group">
-                        <label for="id_icon">图标</label>
+                        <label for="id_icon" style="color: rgba(255,255,255,0.95);">图标</label>
                         {{ form.icon }}
-                        <small class="form-text text-muted">输入emoji图标，如：💪、🦵、❤️等</small>
+                        <small class="form-text" style="color: rgba(255,255,255,0.6);">输入emoji图标，如：💪、🦵、❤️等</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="id_description">简要描述</label>
+                        <label for="id_description" style="color: rgba(255,255,255,0.95);">简要描述</label>
                         {{ form.description }}
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-warning">保存</button>
-                        <a href="{% url 'muscle_home' %}" class="btn btn-secondary ml-2">取消</a>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <a href="{% url 'muscle_home' %}" class="btn btn-outline-secondary" style="margin-left: 0.5rem;">取消</a>
                     </div>
                 </form>
             </div>

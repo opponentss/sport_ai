@@ -1,17 +1,3 @@
-<!--
-    餐饮记录列表页模板
-
-    本页面以卡片形式显示用户的所有餐饮记录。
-    每个卡片包含餐食图片、类型、日期时间、描述和卡路里信息。
-
-    页面功能：
-    - 以卡片网格形式展示餐饮记录
-    - 支持图片显示
-    - 提供编辑和删除操作
-
-    后端传递的上下文变量：
-    - meals: Meal 模型查询集，包含用户的餐饮记录
--->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -19,51 +5,299 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三餐记录</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .btn-bar {
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: #fff;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+            color: #fff;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-body {
+            background: transparent;
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-meta {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .card-calories {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.9);
+            border: none;
+            color: #fff;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-edit:hover {
+            background: rgba(255, 193, 7, 1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.9);
+            border: none;
+            color: #fff;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-delete:hover {
+            background: rgba(220, 53, 69, 1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .meal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-top: 20px;
+            }
+
+            .page-title {
+                font-size: 1.6rem;
+            }
+
+            .btn-bar {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn-home, .btn-add {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <!-- 页面标题 -->
-        <h1>三餐记录</h1>
+    <div class="container">
+        <h1 class="page-title">🍽️ 三餐记录</h1>
 
-        <!-- 按钮区域 -->
-        <div class="mb-3">
-            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
-            <a href="{% url 'meal_create' %}" class="btn btn-primary">添加三餐记录</a>
+        <div class="btn-bar">
+            <a href="{% url 'home' %}" class="btn-home">🏠 返回主页</a>
+            <a href="{% url 'meal_create' %}" class="btn-add">➕ 添加记录</a>
         </div>
 
-        <!-- 餐饮记录卡片网格 -->
+        {% if meals %}
         <div class="row">
             {% for meal in meals %}
             <div class="col-md-4 mb-4">
-                <div class="card">
-                    <!-- 餐食图片 -->
+                <div class="glass-card">
                     {% if meal.image %}
-                    <img src="{{ meal.image.url }}" class="card-img-top" alt="{{ meal.get_meal_type_display }}">
+                    <img src="{{ meal.image.url }}" class="card-img" alt="{{ meal.get_meal_type_display }}">
+                    {% else %}
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1);">
+                        <span class="meal-icon">🍽️</span>
+                    </div>
                     {% endif %}
 
                     <div class="card-body">
-                        <!-- 餐食类型（早餐/午餐/晚餐） -->
                         <h5 class="card-title">{{ meal.get_meal_type_display }}</h5>
-                        <!-- 日期时间 -->
-                        <p class="card-text">{{ meal.date }} {{ meal.time }}</p>
-                        <!-- 餐食描述 -->
+                        <p class="card-meta">📅 {{ meal.date }} {{ meal.time }}</p>
                         {% if meal.description %}
-                        <p class="card-text">{{ meal.description }}</p>
+                        <p class="card-desc">{{ meal.description|truncatewords:20 }}</p>
                         {% endif %}
-                        <!-- 卡路里信息 -->
                         {% if meal.calories %}
-                        <p class="card-text">卡路里：{{ meal.calories }}</p>
+                        <span class="card-calories">🔥 {{ meal.calories }} kcal</span>
                         {% endif %}
-                        <!-- 操作按钮 -->
                         <div class="btn-group">
-                            <a href="{% url 'meal_update' meal.pk %}" class="btn btn-sm btn-warning">编辑</a>
-                            <a href="{% url 'meal_delete' meal.pk %}" class="btn btn-sm btn-danger">删除</a>
+                            <a href="{% url 'meal_update' meal.pk %}" class="btn-edit">✏️ 编辑</a>
+                            <a href="{% url 'meal_delete' meal.pk %}" class="btn-delete">🗑️ 删除</a>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="glass-card empty-state">
+            <span class="empty-icon">🍽️</span>
+            <h3>暂无餐饮记录</h3>
+            <p>点击上方「添加记录」开始记录您的饮食</p>
+        </div>
+        {% endif %}
     </div>
 </body>
 </html>

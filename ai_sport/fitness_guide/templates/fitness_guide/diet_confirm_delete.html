@@ -1,62 +1,37 @@
-<!--
-    饮食建议删除确认页模板
-
-    本页面用于确认删除饮食建议操作，防止误删。
-    采用醒目的红色警告样式。
-
-    后端传递的上下文变量：
-    - title: 页面标题
-    - diet_item: 要删除的 DietItem 模型实例
-    - category: 类别标识符
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- 返回按钮 -->
         <div class="back-btn">
-            <a href="{% url 'diet_detail' category diet_item.id %}" class="btn btn-outline-success">← 返回详情</a>
+            <a href="{% url 'diet_detail' category diet_item.id %}" class="btn btn-outline-primary">← 返回详情</a>
         </div>
 
-        <!-- 删除确认卡片 -->
-        <div class="card border-danger">
-            <div class="card-header bg-danger text-white">
-                <h4 class="mb-0">⚠️ 确认删除</h4>
+        <div class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center; padding: 2rem;">
+            <span style="font-size: 4rem; display: block; margin-bottom: 1.5rem;">⚠️</span>
+            <h2 style="color: #fff; margin-bottom: 1rem;">确认删除</h2>
+
+            <div class="glass-card mb-4" style="background: rgba(255,255,255,0.1); padding: 1.5rem;">
+                <h5 style="color: #fff;">{{ diet_item.title }}</h5>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 0;">
+                    类别：{{ diet_item.get_category_display }}
+                    {% if diet_item.is_featured %}
+                    <span class="badge" style="background: rgba(255,193,7,0.9); color: #fff; margin-left: 0.5rem;">精选推荐</span>
+                    {% endif %}
+                </p>
             </div>
 
-            <div class="card-body">
-                <!-- 警告信息 -->
-                <div class="alert alert-warning">
-                    <strong>警告：</strong> 此操作无法撤销！
-                </div>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 2rem;">确定要删除以上饮食建议吗？<br>此操作无法撤销。</p>
 
-                <!-- 要删除的内容信息 -->
-                <p class="lead">确定要删除以下饮食建议吗？</p>
-                <div class="card bg-light mb-4">
-                    <div class="card-body">
-                        <h5>{{ diet_item.title }}</h5>
-                        <p class="text-muted mb-0">
-                            类别：{{ diet_item.get_category_display }}<br>
-                            {% if diet_item.is_featured %}
-                            <span class="badge badge-warning">精选推荐</span>
-                            {% endif %}
-                        </p>
-                    </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="btn-group" style="display: flex; gap: 1rem; justify-content: center;">
+                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); border: none;">确认删除</button>
+                    <a href="{% url 'diet_detail' category diet_item.id %}" class="btn btn-outline-secondary">取消</a>
                 </div>
-
-                <!-- 删除表单 -->
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-danger">确认删除</button>
-                        <a href="{% url 'diet_detail' category diet_item.id %}" class="btn btn-secondary">取消</a>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 </div>

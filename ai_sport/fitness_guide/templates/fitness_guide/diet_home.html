@@ -1,28 +1,8 @@
-<!--
-    饮食建议分类首页模板
-
-    本页面展示饮食建议的五大分类入口，以及推荐的饮食建议。
-    采用不同于器材页面的设计风格，使用图标卡片布局。
-
-    分类入口：
-    1. 健身前饮食 - 运动前的饮食准备
-    2. 健身后饮食 - 运动后的营养补充
-    3. 日常营养 - 均衡饮食指南
-    4. 营养补剂 - 补剂的正确使用
-    5. 饮食小贴士 - 实用饮食技巧
-
-    页面特点：
-    - 顶部展示推荐饮食建议（横向滚动卡片）
-    - 中部为分类入口（图标+文字卡片）
-    - 使用绿色主题色（与器材页面区分）
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<!-- 返回按钮 -->
 <div class="row">
     <div class="col-12">
         <div class="back-btn">
@@ -31,31 +11,29 @@
     </div>
 </div>
 
-<!-- 页面主标题区域，绿色主题 -->
 <div class="row">
     <div class="col-12">
-        <div class="jumbotron bg-success text-white p-4 mb-4">
-            <h1 class="display-4">{{ title }}</h1>
+        <div class="jumbotron">
+            <h1>{{ title }}</h1>
             <p class="lead">科学饮食是健身成功的关键，了解正确的饮食原则和方法</p>
         </div>
     </div>
 </div>
 
-<!-- 推荐饮食建议区域（横向卡片） -->
 {% if featured_items %}
 <div class="row mb-5">
     <div class="col-12">
-        <h3 class="mb-3">⭐ 精选推荐</h3>
+        <h3 class="mb-3" style="color: #fff;">⭐ 精选推荐</h3>
         <div class="featured-scroll d-flex flex-row overflow-auto pb-3" style="gap: 1rem;">
             {% for item in featured_items %}
-            <div class="card featured-card" style="min-width: 280px; max-width: 280px;">
+            <div class="glass-card" style="min-width: 280px; max-width: 280px; padding: 0; overflow: hidden;">
                 {% if item.image %}
                 <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 160px; object-fit: cover;">
                 {% endif %}
                 <div class="card-body">
-                    <h6 class="card-title">{{ item.title }}</h6>
-                    <p class="card-text small text-muted">{{ item.get_category_display }}</p>
-                    <a href="{% url 'diet_detail' item.category item.id %}" class="btn btn-sm btn-success">查看详情</a>
+                    <h6 class="card-title" style="color: #fff;">{{ item.title }}</h6>
+                    <p class="card-text small" style="color: rgba(255,255,255,0.7);">{{ item.get_category_display }}</p>
+                    <a href="{% url 'diet_detail' item.category item.id %}" class="btn btn-primary btn-sm">查看详情</a>
                 </div>
             </div>
             {% endfor %}
@@ -64,62 +42,20 @@
 </div>
 {% endif %}
 
-<!-- 分类入口卡片区域，3列布局 -->
 <div class="row">
     {% for cat in categories %}
     <div class="col-md-4 mb-4">
-        <!-- 分类卡片，绿色边框效果 -->
-        <div class="card category-card h-100" style="border-left: 5px solid #28a745;">
+        <div class="glass-card module-card" style="border-left: 5px solid rgba(255,255,255,0.5);">
             <div class="card-body">
-                <!-- 分类图标（使用emoji） -->
-                <div class="category-icon mb-3">
-                    {% if cat.key == 'pre_workout' %}
-                    <span style="font-size: 2.5rem;">🍌</span>
-                    {% elif cat.key == 'post_workout' %}
-                    <span style="font-size: 2.5rem;">💪</span>
-                    {% elif cat.key == 'daily_nutrition' %}
-                    <span style="font-size: 2.5rem;">🥗</span>
-                    {% elif cat.key == 'supplement' %}
-                    <span style="font-size: 2.5rem;">💊</span>
-                    {% elif cat.key == 'tips' %}
-                    <span style="font-size: 2.5rem;">💡</span>
-                    {% endif %}
+                <div style="font-size: 2.5rem; margin-bottom: 1rem;">
+                    {% if cat.key == 'pre_workout' %}🍌{% elif cat.key == 'post_workout' %}💪{% elif cat.key == 'daily_nutrition' %}🥗{% elif cat.key == 'supplement' %}💊{% elif cat.key == 'tips' %}💡{% endif %}
                 </div>
-                <!-- 分类名称 -->
-                <h5 class="card-title text-success">{{ cat.name }}</h5>
-                <!-- 分类描述 -->
-                <p class="card-text">{{ cat.description }}</p>
-                <!-- 进入按钮 -->
-                <a href="{% url 'diet_list' cat.key %}" class="btn btn-outline-success">进入学习</a>
+                <h5 class="card-title" style="color: #fff;">{{ cat.name }}</h5>
+                <p class="card-text" style="color: rgba(255,255,255,0.9);">{{ cat.description }}</p>
+                <a href="{% url 'diet_list' cat.key %}" class="btn btn-outline-primary">进入学习</a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-
-<!-- 样式 -->
-<style>
-    .category-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(40, 167, 69, 0.2);
-    }
-    .featured-card {
-        border: none;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .featured-scroll::-webkit-scrollbar {
-        height: 8px;
-    }
-    .featured-scroll::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 4px;
-    }
-    .featured-scroll::-webkit-scrollbar-thumb {
-        background: #28a745;
-        border-radius: 4px;
-    }
-</style>
 {% endblock %}

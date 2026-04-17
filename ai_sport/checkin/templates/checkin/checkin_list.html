@@ -1,78 +1,277 @@
-<!--
-    打卡记录列表页模板
-
-    本页面显示当前用户的所有打卡记录，以表格形式展示。
-    包含活动名称、时长、日期时间、位置等信息。
-
-    页面功能：
-    - 显示所有打卡记录表格
-    - 提供添加打卡按钮
-    - 提供编辑和删除操作按钮
-
-    后端传递的上下文变量：
-    - checkins: Checkin 模型查询集，包含用户的打卡记录
--->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- 字符编码 -->
     <meta charset="UTF-8">
-    <!-- 响应式视口设置 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 页面标题 -->
     <title>打卡记录</title>
-    <!-- 引入 Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .btn-bar {
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: #fff;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+            color: #fff;
+        }
+
+        .glass-table {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .table {
+            margin-bottom: 0;
+            color: #fff;
+        }
+
+        .table thead th {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            font-weight: 600;
+            padding: 1.2rem 1rem;
+            text-align: center;
+        }
+
+        .table tbody td {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border: none;
+            padding: 1rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) td {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.9);
+            border: none;
+            color: #fff;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-edit:hover {
+            background: rgba(255, 193, 7, 1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.9);
+            border: none;
+            color: #fff;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-delete:hover {
+            background: rgba(220, 53, 69, 1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-top: 20px;
+            }
+
+            .page-title {
+                font-size: 1.6rem;
+            }
+
+            .btn-bar {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn-home, .btn-add {
+                width: 100%;
+                text-align: center;
+            }
+
+            .glass-table {
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- 主容器，上 margin 为 5 -->
-    <div class="container mt-5">
-        <!-- 页面标题 -->
-        <h1>打卡记录</h1>
+    <div class="container">
+        <h1 class="page-title">💪 打卡记录</h1>
 
-        <!-- 按钮区域：返回主页和添加打卡 -->
-        <div class="mb-3">
-            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
-            <a href="{% url 'checkin_create' %}" class="btn btn-primary">添加打卡</a>
+        <div class="btn-bar">
+            <a href="{% url 'home' %}" class="btn-home">🏠 返回主页</a>
+            <a href="{% url 'checkin_create' %}" class="btn-add">➕ 添加打卡</a>
         </div>
 
-        <!-- 打卡记录表格，使用 Bootstrap 条纹表格样式 -->
-        <table class="table table-striped">
-            <!-- 表头 -->
-            <thead>
-                <tr>
-                    <th>活动</th>
-                    <th>时长（分钟）</th>
-                    <th>日期</th>
-                    <th>时间</th>
-                    <th>位置</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-
-            <!-- 表格主体：遍历打卡记录 -->
-            <tbody>
-                {% for checkin in checkins %}
-                <tr>
-                    <!-- 活动名称 -->
-                    <td>{{ checkin.activity }}</td>
-                    <!-- 时长（分钟） -->
-                    <td>{{ checkin.duration }}</td>
-                    <!-- 打卡日期 -->
-                    <td>{{ checkin.date }}</td>
-                    <!-- 打卡时间 -->
-                    <td>{{ checkin.time }}</td>
-                    <!-- 位置（无数据时显示"未记录"） -->
-                    <td>{{ checkin.location|default:"未记录" }}</td>
-                    <!-- 操作按钮：编辑和删除 -->
-                    <td>
-                        <a href="{% url 'checkin_update' checkin.pk %}" class="btn btn-sm btn-warning">编辑</a>
-                        <a href="{% url 'checkin_delete' checkin.pk %}" class="btn btn-sm btn-danger">删除</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if checkins %}
+        <div class="glass-table">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>活动</th>
+                        <th>时长（分钟）</th>
+                        <th>日期</th>
+                        <th>时间</th>
+                        <th>位置</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for checkin in checkins %}
+                    <tr>
+                        <td>{{ checkin.activity }}</td>
+                        <td>{{ checkin.duration }}</td>
+                        <td>{{ checkin.date }}</td>
+                        <td>{{ checkin.time }}</td>
+                        <td>{{ checkin.location|default:"未记录" }}</td>
+                        <td>
+                            <a href="{% url 'checkin_update' checkin.pk %}" class="btn-edit">✏️ 编辑</a>
+                            <a href="{% url 'checkin_delete' checkin.pk %}" class="btn-delete">🗑️ 删除</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="glass-table">
+            <div class="empty-state">
+                <span class="empty-icon">💪</span>
+                <h3>暂无打卡记录</h3>
+                <p>点击上方「添加打卡」开始记录您的运动</p>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </body>
 </html>

@@ -1,85 +1,49 @@
-<!--
-    器材详情页模板
-
-    本页面显示单个器材的详细信息，包括图片、名称、类别、描述和视频链接。
-    管理员可在此页面编辑或删除器材。
-
-    页面布局：
-    - 左侧：器材大图（或占位符）
-    - 右侧：器材详细信息
-
-    后端传递的上下文变量：
-    - equipment: Equipment 模型实例，包含以下字段：
-        - name: 器材名称
-        - category: 器材类别
-        - get_category_display: 类别中文名称
-        - image: 器材图片
-        - description: 器材描述
-        - video_url: 视频链接
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题为器材名称 -->
 {% block title %}{{ equipment.name }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- 返回按钮 -->
         <div class="back-btn">
             <a href="{% url 'equipment_list' equipment.category %}" class="btn btn-outline-primary">← 返回器材列表</a>
         </div>
 
-        <!-- 器材详情卡片 -->
-        <div class="card">
+        <div class="glass-card" style="padding: 0; overflow: hidden;">
             <div class="row no-gutters">
-                <!-- 左侧图片区域 -->
                 <div class="col-md-6">
                     {% if equipment.image %}
-                    <!-- 有图片时显示大图 -->
-                    <img src="{{ equipment.image.url }}" class="card-img" alt="{{ equipment.name }}">
+                    <img src="{{ equipment.image.url }}" class="card-img" alt="{{ equipment.name }}" style="height: 100%; min-height: 400px; object-fit: cover;">
                     {% else %}
-                    <!-- 无图片时显示占位符 -->
-                    <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 400px; background-color: #e9ecef;">
-                        <span class="text-muted">暂无图片</span>
+                    <div style="height: 400px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 5rem; opacity: 0.5;">🏋️</span>
                     </div>
                     {% endif %}
                 </div>
 
-                <!-- 右侧信息区域 -->
                 <div class="col-md-6">
-                    <div class="card-body">
-                        <!-- 器材名称 -->
-                        <h2 class="card-title">{{ equipment.name }}</h2>
+                    <div class="card-body" style="padding: 2rem;">
+                        <h2 class="card-title" style="color: #fff; margin-bottom: 1rem;">{{ equipment.name }}</h2>
 
-                        <!-- 器材类别标签 -->
-                        <p class="card-text">
-                            <span class="badge badge-info">{{ equipment.get_category_display }}</span>
-                        </p>
+                        <span class="badge" style="background: rgba(255,255,255,0.2); color: #fff; padding: 0.5rem 1rem; border-radius: 20px; margin-bottom: 1rem;">{{ equipment.get_category_display }}</span>
 
-                        <!-- 器材描述 -->
                         {% if equipment.description %}
-                        <p class="card-text">{{ equipment.description }}</p>
+                        <p class="card-text" style="color: rgba(255,255,255,0.9); line-height: 1.8; margin-top: 1.5rem;">{{ equipment.description }}</p>
                         {% endif %}
 
-                        <!-- 视频链接区域 -->
                         {% if equipment.video_url %}
                         <div class="mt-4">
-                            <h5>教学视频</h5>
-                            <!-- 打开新窗口观看视频 -->
-                            <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-danger">
+                            <h5 style="color: #fff; margin-bottom: 1rem;">📺 教学视频</h5>
+                            <a href="{{ equipment.video_url }}" target="_blank" class="btn btn-primary">
                                 <i class="fas fa-play"></i> 观看视频
                             </a>
                         </div>
                         {% endif %}
 
-                        <!-- 管理员操作按钮区域 -->
                         {% if user.is_staff %}
-                        <div class="mt-4">
-                            <!-- 编辑按钮 -->
-                            <a href="{% url 'equipment_update' equipment.category equipment.id %}" class="btn btn-warning">编辑</a>
-                            <!-- 删除按钮 -->
-                            <a href="{% url 'equipment_delete' equipment.category equipment.id %}" class="btn btn-danger">删除</a>
+                        <div class="mt-4" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                            <a href="{% url 'equipment_update' equipment.category equipment.id %}" class="btn btn-outline-primary btn-sm">编辑</a>
+                            <a href="{% url 'equipment_delete' equipment.category equipment.id %}" class="btn btn-outline-secondary btn-sm" style="border-color: rgba(220,53,69,0.5); color: #ff6b6b;">删除</a>
                         </div>
                         {% endif %}
                     </div>

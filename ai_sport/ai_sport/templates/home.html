@@ -1,20 +1,8 @@
 <!--
-    项目首页模板
+    项目首页模板 - 磨砂玻璃风格
 
     本页面是整个应用的入口页面，展示四大功能模块入口。
-    使用 Bootstrap 栅格系统实现响应式布局。
-
-    功能模块：
-    1. 健身前你该知道的 - 健身基础知识学习
-    2. 打卡记录 - 运动打卡功能
-    3. 三餐记录 - 饮食记录功能
-    4. 作息记录 - 睡眠记录功能
-
-    页面特点：
-    - 顶部导航栏（与健身指南模块风格一致）
-    - 四个功能入口卡片
-    - 卡片悬浮动画效果
-    - 根据用户登录状态显示不同内容
+    使用 Bootstrap 栅格系统和磨砂玻璃设计风格。
 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -22,71 +10,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健身打卡</title>
-    <!-- 引入 Bootstrap 4 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-    <!-- 首页专属样式 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 卡片悬浮动画效果 */
-        .card {
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* 卡片悬浮效果 */
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* 卡片内容居中 */
-        .card-body {
-            text-align: center;
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.08) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        /* 导航栏阴影 */
         .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.8rem 1rem;
+            position: relative;
+            z-index: 1000;
+            
+            
+            display: flex;      
+            justify-content: space-between auto;          
+            margin-right: center;
+        }
+
+        .navbar-brand {
+            font-weight: 700;                /* 加粗字体，突出品牌 */
+            font-size: 1.5rem;              /* 相对于根元素字号 1.5 倍，一般约 24px */
+            color: #fff !important;         /* 强制白色文字，覆盖 Bootstrap 等框架默认色 */
+            text-shadow: 0 2px 15px rgba(0,0,0,0.2); /* 向下 2px 的柔和黑色阴影，增加立体感和可读性 */
+            letter-spacing: 2px;            /* 字间距拉开 2px，显得更精致、现代 */
+            
+
+             /* 居中方案：绝对定位（适合品牌始终居中，无视左右菜单） */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.95) !important;
+            font-weight: 500;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 300;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #fff, rgba(255,255,255,0.5));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            background: rgba(255, 255, 255, 0.28);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .module-card:hover::before {
+            opacity: 1;
+        }
+
+        .module-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+        }
+
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .module-desc {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .btn-light {
+            background: rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            color: #fff !important;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.4) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .module-card {
+                padding: 2rem 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <!-- 品牌标识 -->
             <a class="navbar-brand" href="{% url 'home' %}">健身打卡</a>
-
-            <!-- 移动端折叠菜单按钮 -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- 导航链接区域 -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- 左侧导航链接 -->
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'fitness_guide_home' %}">健身前你该知道的</a>
-                    </li>
-                </ul>
-
-                <!-- 右侧用户状态区域 -->
                 <ul class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
-                        <!-- 已登录状态：显示用户名和退出按钮 -->
                         <li class="nav-item">
-                            <span class="navbar-text text-white mr-3">欢迎, {{ user.username }}</span>
+                            <span class="navbar-text mr-3">👤 {{ user.username }}</span>
                         </li>
                         <li class="nav-item">
-                            <!-- 退出登录表单 -->
                             <form method="post" action="{% url 'logout' %}" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-sm">退出登录</button>
+                                <button type="submit" class="btn btn-light btn-sm">退出</button>
                             </form>
                         </li>
                     {% else %}
-                        <!-- 未登录状态：显示登录按钮 -->
                         <li class="nav-item">
                             <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
                         </li>
@@ -96,60 +238,39 @@
         </div>
     </nav>
 
-    <!-- 主内容区域 -->
-    <div class="container mt-5">
-        <!-- 页面主标题 -->
-        <h1 class="text-center mb-5">健身打卡</h1>
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="hero-title">🏃 健身打卡</h1>
+            <p class="hero-subtitle">记录你的健身旅程，科学管理你的健康</p>
+        </div>
 
-        <!-- 功能模块卡片区域 -->
-        <div class="row">
-            <!-- 模块1：健身前你该知道的 -->
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">健身前你该知道的</h5>
-                        <p class="card-text">了解健身基础知识，饮食建议，肌肉和器材认识</p>
-                        <a href="{% url 'fitness_guide_home' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
+        <div class="module-grid">
+            <a href="{% url 'fitness_guide_home' %}" class="module-card" style="text-decoration: none;">
+                <span class="module-icon">📚</span>
+                <h3 class="module-title">健身指南</h3>
+                <p class="module-desc">了解健身基础知识，饮食建议，肌肉和器材认识</p>
+            </a>
 
-            <!-- 模块2：打卡记录 -->
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">打卡记录</h5>
-                        <p class="card-text">记录你的健身活动，支持定位功能</p>
-                        <a href="{% url 'checkin_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'checkin_list' %}" class="module-card" style="text-decoration: none;">
+                <span class="module-icon">✅</span>
+                <h3 class="module-title">打卡记录</h3>
+                <p class="module-desc">记录你的健身活动，支持定位功能</p>
+            </a>
 
-            <!-- 模块3：三餐记录 -->
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">三餐记录</h5>
-                        <p class="card-text">记录你的饮食情况，支持拍照功能</p>
-                        <a href="{% url 'meal_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'meal_list' %}" class="module-card" style="text-decoration: none;">
+                <span class="module-icon">🍽️</span>
+                <h3 class="module-title">三餐记录</h3>
+                <p class="module-desc">记录你的饮食情况，支持拍照和AI识别</p>
+            </a>
 
-            <!-- 模块4：作息记录 -->
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">作息记录</h5>
-                        <p class="card-text">记录你的睡眠情况，分析睡眠质量</p>
-                        <a href="{% url 'sleep_list' %}" class="btn btn-primary">进入</a>
-                    </div>
-                </div>
-            </div>
+            <a href="{% url 'sleep_list' %}" class="module-card" style="text-decoration: none;">
+                <span class="module-icon">😴</span>
+                <h3 class="module-title">作息记录</h3>
+                <p class="module-desc">记录你的睡眠情况，分析睡眠质量</p>
+            </a>
         </div>
     </div>
 
-    <!-- 引入 Bootstrap JS 依赖 -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

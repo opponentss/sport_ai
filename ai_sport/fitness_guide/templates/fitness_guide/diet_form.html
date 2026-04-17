@@ -1,93 +1,61 @@
-<!--
-    饮食建议表单页模板
-
-    本页面用于添加或编辑饮食建议。
-    支持图片上传、视频链接输入、富文本内容编辑。
-
-    表单字段：
-    - title: 建议标题
-    - category: 建议类别
-    - image: 配图（可选）
-    - video_url: 视频链接（可选）
-    - content: 详细内容
-    - is_featured: 推荐显示
-
-    后端传递的上下文变量：
-    - title: 页面标题
-    - form: DietItemForm 表单实例
-    - category: 类别标识符
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- 返回按钮 -->
         <div class="back-btn">
-            <a href="{% url 'diet_list' category %}" class="btn btn-outline-success">← 返回列表</a>
+            <a href="{% url 'diet_list' category %}" class="btn btn-outline-primary">← 返回列表</a>
         </div>
 
-        <!-- 表单卡片，绿色主题 -->
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">{{ title }}</h4>
+        <div class="glass-card">
+            <div class="card-header" style="background: rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h4 class="mb-0" style="color: #fff;">{{ title }}</h4>
             </div>
 
             <div class="card-body">
-                <!-- 表单开始 -->
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
-                    <!-- 标题字段 -->
                     <div class="form-group">
-                        <label for="id_title">标题 <span class="text-danger">*</span></label>
+                        <label for="id_title" style="color: rgba(255,255,255,0.95);">标题 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.title }}
-                        <small class="form-text text-muted">输入饮食建议的标题，简明扼要</small>
                     </div>
 
-                    <!-- 类别字段 -->
                     <div class="form-group">
-                        <label for="id_category">类别 <span class="text-danger">*</span></label>
+                        <label for="id_category" style="color: rgba(255,255,255,0.95);">类别 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.category }}
                     </div>
 
-                    <!-- 配图上传 -->
                     <div class="form-group">
-                        <label for="id_image">配图</label>
+                        <label for="id_image" style="color: rgba(255,255,255,0.95);">配图</label>
                         {{ form.image }}
-                        <small class="form-text text-muted">上传相关图片，支持 JPG、PNG 格式</small>
+                        <small class="form-text" style="color: rgba(255,255,255,0.6);">上传相关图片，支持 JPG、PNG 格式</small>
                     </div>
 
-                    <!-- 视频链接 -->
                     <div class="form-group">
-                        <label for="id_video_url">视频链接</label>
+                        <label for="id_video_url" style="color: rgba(255,255,255,0.95);">视频链接</label>
                         {{ form.video_url }}
-                        <small class="form-text text-muted">输入相关的视频教程链接，如 YouTube 视频地址</small>
+                        <small class="form-text" style="color: rgba(255,255,255,0.6);">输入相关的视频教程链接</small>
                     </div>
 
-                    <!-- 详细内容 -->
                     <div class="form-group">
-                        <label for="id_content">详细内容 <span class="text-danger">*</span></label>
+                        <label for="id_content" style="color: rgba(255,255,255,0.95);">详细内容 <span style="color: #ff6b6b;">*</span></label>
                         {{ form.content }}
-                        <small class="form-text text-muted">详细描述饮食建议的具体内容和建议</small>
                     </div>
 
-                    <!-- 推荐显示复选框 -->
                     <div class="form-group form-check">
                         {{ form.is_featured }}
-                        <label class="form-check-label" for="id_is_featured">
+                        <label class="form-check-label" for="id_is_featured" style="color: rgba(255,255,255,0.9);">
                             推荐显示
                         </label>
-                        <small class="form-text text-muted d-block">勾选后将在首页推荐区域显示</small>
+                        <small class="form-text d-block" style="color: rgba(255,255,255,0.6);">勾选后将在首页推荐区域显示</small>
                     </div>
 
-                    <!-- 提交按钮 -->
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-success">保存</button>
-                        <a href="{% url 'diet_list' category %}" class="btn btn-secondary ml-2">取消</a>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                        <a href="{% url 'diet_list' category %}" class="btn btn-outline-secondary" style="margin-left: 0.5rem;">取消</a>
                     </div>
                 </form>
             </div>

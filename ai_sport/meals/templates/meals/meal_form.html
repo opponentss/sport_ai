@@ -1,24 +1,3 @@
-<!--
-    餐饮记录表单页模板
-
-    本页面用于添加或编辑餐饮记录。
-    支持图片上传和 AI 食物识别分析功能。
-
-    表单字段：
-    - meal_type: 餐食类型（早餐/午餐/晚餐）
-    - date: 用餐日期
-    - time: 用餐时间
-    - image: 餐食图片
-    - description: 餐食描述
-    - calories: 卡路里摄入
-
-    页面功能：
-    - 支持图片上传
-    - 提供 AI 分析按钮（预留功能）
-
-    后端传递的上下文变量：
-    - form: MealForm 表单实例
--->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -26,87 +5,629 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>添加/编辑三餐记录</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- 引入 jQuery 库，用于 AI 分析功能 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-weight: 600;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .card-body {
+            background: transparent;
+            padding: 1.5rem;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+
+        .upload-area p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .preview-container {
+            max-width: 280px;
+            margin: 1.5rem auto 0;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 12px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            padding: 14px 35px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+            margin-top: 1.5rem;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .analyze-hint {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 0;
+            border-left: 4px solid #28a745;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .result-title {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .food-item:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateX(5px);
+        }
+
+        .food-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .food-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .food-quantity {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        .calorie-badge {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .total-calories {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .total-label {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .tips-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+            backdrop-filter: blur(15px);
+            color: white;
+            padding: 15px 18px;
+            border-radius: 12px;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tips-box small {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            color: #fff;
+            padding: 0.85rem 1rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-text {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+        }
+
+        select.form-control {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+        }
+
+        select.form-control option {
+            background: #764ba2;
+            color: #fff;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 0.8rem 2rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .loading-modal .modal-content {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-result {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-top: 20px;
+            }
+
+            .page-title {
+                font-size: 1.6rem;
+            }
+
+            .glass-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .upload-area {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>添加/编辑三餐记录</h1>
+    <div class="container">
+        <h1 class="page-title">🍽️ 添加三餐记录</h1>
 
-        <!-- 餐饮表单，支持文件上传 -->
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-5 mb-4">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📷 餐食照片</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">🖼️</div>
+                            <p>点击或拖拽图片到此处上传</p>
+                            <p class="small">支持 JPG、PNG 格式</p>
+                            <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;">
+                        </div>
 
-            <!-- 餐食类型 -->
-            <div class="form-group">
-                {{ form.meal_type.label_tag }} {{ form.meal_type }}
-            </div>
+                        <div class="preview-container">
+                            <img id="previewImage" class="preview-image" alt="预览图片">
+                        </div>
 
-            <!-- 用餐日期 -->
-            <div class="form-group">
-                {{ form.date.label_tag }} {{ form.date }}
-            </div>
-
-            <!-- 用餐时间 -->
-            <div class="form-group">
-                {{ form.time.label_tag }} {{ form.time }}
-            </div>
-
-            <!-- 餐食图片 -->
-            <div class="form-group">
-                {{ form.image.label_tag }} {{ form.image }}
-            </div>
-
-            <!-- 餐食描述，带 AI 分析按钮 -->
-            <div class="form-group">
-                {{ form.description.label_tag }}
-                <div class="input-group">
-                    {{ form.description }}
-                    <div class="input-group-append">
-                        <!-- AI 分析按钮 -->
-                        <button type="button" id="ai-analyze-btn" class="btn btn-info">AI 分析</button>
+                        <div class="text-center">
+                            <button type="button" id="analyzeBtn" class="analyze-btn" disabled>
+                                🔍 AI 智能分析
+                            </button>
+                            <p class="analyze-hint">上传图片后点击分析</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 卡路里 -->
-            <div class="form-group">
-                {{ form.calories.label_tag }} {{ form.calories }}
-            </div>
+            <div class="col-lg-7">
+                <div class="result-card" id="resultCard" style="display: none;">
+                    <h5 class="result-title">📊 营养分析结果</h5>
+                    <div id="foodList"></div>
+                    <div class="total-calories">
+                        <span class="total-label">总热量：</span>
+                        <span class="calorie-badge" id="totalCalories">0 kcal</span>
+                    </div>
+                    <div class="tips-box" id="nutritionTips" style="display: none;">
+                        <small>💡 <span id="tipsText"></span></small>
+                    </div>
+                </div>
 
-            <!-- 提交按钮 -->
-            <button type="submit" class="btn btn-primary">保存</button>
-            <!-- 取消按钮 -->
-            <a href="{% url 'meal_list' %}" class="btn btn-secondary">取消</a>
-        </form>
+                <div class="glass-card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">📝 记录信息</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" id="mealForm">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label>餐食类型</label>
+                                {{ form.meal_type }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>用餐日期</label>
+                                        {{ form.date }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>用餐时间</label>
+                                        {{ form.time }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>食物描述</label>
+                                {{ form.description }}
+                                <small class="form-text">可手动输入或由 AI 分析自动填充</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>总卡路里 (kcal)</label>
+                                {{ form.calories }}
+                                <small class="form-text">AI 分析会自动填充，也可手动修改</small>
+                            </div>
+
+                            <div style="display: none;">
+                                {{ form.image }}
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-submit">💾 保存记录</button>
+                                <a href="{% url 'meal_list' %}" class="btn btn-cancel ml-2">取消</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- AI 分析功能脚本 -->
+    <div class="modal fade loading-modal" id="loadingModal" tabindex="-1" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+                <div class="modal-body py-5">
+                    <div class="loading-spinner mx-auto mb-3"></div>
+                    <h5>AI 正在分析中...</h5>
+                    <p class="small mb-0">正在识别食物并计算营养成分</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
-            // AI 分析按钮点击事件
-            $('#ai-analyze-btn').click(function() {
-                // 检查是否上传了图片
-                if ($('#id_image').val() === '') {
+            var uploadedFile = null;
+
+            $('#uploadArea').click(function() {
+                $('#imageInput').click();
+            });
+
+            $('#imageInput').change(function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    uploadedFile = file;
+                    previewImage(file);
+                    $('#analyzeBtn').prop('disabled', false);
+                }
+            });
+
+            $('#uploadArea').on('dragover dragleave', function(e) {
+                e.preventDefault();
+                $(this).toggleClass('dragover');
+            });
+
+            $('#uploadArea').on('drop', function(e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+                var file = e.originalEvent.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    uploadedFile = file;
+                    previewImage(file);
+                    $('#analyzeBtn').prop('disabled', false);
+                }
+            });
+
+            function previewImage(file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#previewImage').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            }
+
+            $('#analyzeBtn').click(function() {
+                if (!uploadedFile) {
                     alert('请先上传食物图片');
                     return;
                 }
 
-                // 显示加载状态
-                $('#ai-analyze-btn').text('分析中...').prop('disabled', true);
+                var formData = new FormData();
+                formData.append('image', uploadedFile);
 
-                // 模拟 AI 分析过程（实际应调用后端 API）
-                setTimeout(function() {
-                    // 填充模拟数据
-                    $('#id_description').val('米饭; 鸡蛋; 青菜');
-                    $('#id_calories').val('223');
+                $('#loadingModal').modal('show');
+                $('#analyzeBtn').prop('disabled', true).html('<span class="loading-spinner"></span> 分析中...');
 
-                    // 恢复按钮状态
-                    $('#ai-analyze-btn').text('AI 分析').prop('disabled', false);
+                $.ajax({
+                    url: '{% url "analyze_food" %}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#loadingModal').modal('hide');
 
-                    // 提示用户
-                    alert('AI 分析完成，已自动填充食物信息和卡路里');
-                }, 1000);
+                        if (response.success) {
+                            displayResults(response);
+                        } else {
+                            alert('分析失败: ' + response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#loadingModal').modal('hide');
+                        alert('请求失败，请重试: ' + error);
+                    },
+                    complete: function() {
+                        $('#analyzeBtn').prop('disabled', false).html('🔍 AI 智能分析');
+                    }
+                });
+            });
+
+            function displayResults(response) {
+                var foodListHtml = '';
+                var totalCalories = 0;
+
+                if (response.foods && response.foods.length > 0) {
+                    response.foods.forEach(function(food) {
+                        totalCalories += food.calories || 0;
+                        foodListHtml += `
+                            <div class="food-item">
+                                <div>
+                                    <span class="food-name">${food.name}</span>
+                                    <br><span class="food-quantity">${food.quantity || ''}</span>
+                                </div>
+                                <span class="calorie-badge" style="font-size: 0.9rem;">${food.calories || 0} kcal</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    foodListHtml = '<p class="empty-result">未识别到食物，请手动输入</p>';
+                }
+
+                $('#foodList').html(foodListHtml);
+                $('#totalCalories').text(totalCalories + ' kcal');
+
+                if (response.nutrition_tips) {
+                    $('#tipsText').text(response.nutrition_tips);
+                    $('#nutritionTips').show();
+                }
+
+                if (response.description) {
+                    $('#id_description').val(response.description);
+                }
+                if (response.total_calories) {
+                    $('#id_calories').val(response.total_calories);
+                }
+
+                $('#resultCard').show();
+            }
+
+            $('#mealForm').submit(function() {
+                if (uploadedFile) {
+                    var dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(uploadedFile);
+                    $('#id_image')[0].files = dataTransfer.files;
+                }
             });
         });
     </script>

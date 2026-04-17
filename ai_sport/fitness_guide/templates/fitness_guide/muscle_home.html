@@ -1,16 +1,3 @@
-<!--
-    肌肉认识首页模板
-
-    本页面展示人体肌肉群分类入口，采用与器材页面不同的设计：
-    - 使用手风琴/折叠面板展示肌肉群
-    - 橙色主题色（与器材蓝色、饮食绿色区分）
-    - 肌肉群按大类分组（上肢/核心/下肢/心肺）
-
-    页面布局：
-    - 顶部：页面标题和简介
-    - 中部：肌肉群分类卡片
-    - 底部：推荐的肌肉部位
--->
 {% extends 'fitness_guide/base.html' %}
 {% load custom_filters %}
 
@@ -25,53 +12,49 @@
     </div>
 </div>
 
-<!-- 页面标题，橙色主题 -->
 <div class="row">
     <div class="col-12">
-        <div class="jumbotron bg-warning text-dark p-4 mb-4">
-            <h1 class="display-4">{{ title }}</h1>
+        <div class="jumbotron">
+            <h1>{{ title }}</h1>
             <p class="lead">了解人体肌肉结构，掌握正确训练方法</p>
         </div>
     </div>
 </div>
 
-<!-- 肌肉群分类区域 -->
 <div class="row mb-5">
     <div class="col-12">
         <div id="accordion">
             {% for cat, groups in grouped_muscle_groups.items %}
-            <div class="card mb-2">
-                <!-- 分类卡片头部 -->
-                <div class="card-header bg-secondary text-white" id="heading{{ forloop.counter }}">
+            <div class="glass-card mb-3" style="padding: 0; overflow: hidden;">
+                <div class="card-header" style="background: rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.2);">
                     <h5 class="mb-0">
-                        <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                        <button class="btn btn-link" type="button" data-toggle="collapse"
                                 data-target="#collapse{{ forloop.counter }}" aria-expanded="true"
-                                aria-controls="collapse{{ forloop.counter }}">
+                                aria-controls="collapse{{ forloop.counter }}" style="color: #fff; text-decoration: none;">
                             {{ category_info|get_item:cat|get_item:'name' }} {{ category_info|get_item:cat|get_item:'icon' }}
                         </button>
                     </h5>
                 </div>
 
-                <!-- 分类内容 -->
                 <div id="collapse{{ forloop.counter }}" class="collapse show"
                      aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion">
                     <div class="card-body">
                         <div class="row">
                             {% for group in groups %}
                             <div class="col-md-4 mb-3">
-                                <div class="card h-100">
+                                <div class="glass-card" style="padding: 0; overflow: hidden;">
                                     <div class="card-body text-center">
-                                        <h5 class="card-title">
+                                        <h5 class="card-title" style="color: #fff;">
                                             {% if group.icon %}{{ group.icon }}{% endif %}
                                             {{ group.name }}
                                         </h5>
                                         {% if group.latin_name %}
-                                        <p class="text-muted small">{{ group.latin_name }}</p>
+                                        <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">{{ group.latin_name }}</p>
                                         {% endif %}
                                         {% if group.description %}
-                                        <p class="card-text small">{{ group.description|truncatewords:20 }}</p>
+                                        <p class="card-text" style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">{{ group.description|truncatewords:20 }}</p>
                                         {% endif %}
-                                        <a href="{% url 'muscle_group_list' group.id %}" class="btn btn-outline-warning btn-sm">
+                                        <a href="{% url 'muscle_group_list' group.id %}" class="btn btn-outline-primary btn-sm">
                                             查看详情
                                         </a>
                                     </div>
@@ -83,41 +66,38 @@
                 </div>
             </div>
             {% empty %}
-            <div class="alert alert-info">
-                暂无肌肉群数据{% if user.is_staff %}，请在后台添加{% endif %}
+            <div class="glass-card" style="text-align: center; padding: 3rem;">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">💪</span>
+                <p style="color: rgba(255,255,255,0.8);">暂无肌肉群数据{% if user.is_staff %}，请在后台添加{% endif %}</p>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<!-- 管理员添加按钮 -->
 {% if user.is_staff %}
 <div class="row mb-4">
     <div class="col-12 text-center">
-        <a href="{% url 'muscle_group_create' %}" class="btn btn-warning">+ 添加肌肉群</a>
+        <a href="{% url 'muscle_group_create' %}" class="btn btn-primary">+ 添加肌肉群</a>
     </div>
 </div>
 {% endif %}
 
-<!-- 推荐肌肉部位 -->
 {% if featured_items %}
 <div class="row mt-4">
     <div class="col-12">
-        <h3 class="mb-3">⭐ 重点肌肉</h3>
+        <h3 class="mb-3" style="color: #fff;">⭐ 重点肌肉</h3>
         <div class="row">
             {% for item in featured_items %}
             <div class="col-md-3 mb-3">
-                <div class="card h-100">
+                <div class="glass-card" style="padding: 0; overflow: hidden;">
                     {% if item.image %}
-                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}"
-                         style="height: 150px; object-fit: cover;">
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 150px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
-                        <h6 class="card-title">{{ item.name }}</h6>
-                        <p class="text-muted small">{{ item.muscle_group.name }}</p>
-                        <a href="{% url 'muscle_detail' item.muscle_group.id item.id %}"
-                           class="btn btn-sm btn-warning">查看详情</a>
+                        <h6 class="card-title" style="color: #fff;">{{ item.name }}</h6>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem;">{{ item.muscle_group.name }}</p>
+                        <a href="{% url 'muscle_detail' item.muscle_group.id item.id %}" class="btn btn-outline-primary btn-sm">查看详情</a>
                     </div>
                 </div>
             </div>
@@ -126,10 +106,4 @@
     </div>
 </div>
 {% endif %}
-
-<style>
-    .card-header:hover {
-        background-color: #6c757d !important;
-    }
-</style>
 {% endblock %}

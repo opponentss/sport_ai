@@ -1,118 +1,428 @@
 <!--
-    健身指南模块基础模板
+    健身指南模块基础模板 - 磨砂玻璃风格
 
-    本模板是健身指南模块的所有页面的父模板，定义了统一的页面结构和样式。
+    本模板采用现代磨砂玻璃（Glassmorphism）设计风格。
     包含导航栏、内容区域，使用 Bootstrap 4 框架实现响应式布局。
 
-    子模板可以通过覆写以下 block 来定制内容：
-    - title: 页面标题
-    - content: 页面主体内容
-
-    样式说明：
-    - 使用 Bootstrap 4 的 card 组件实现卡片效果
-    - module-card: 模块卡片样式，带有悬浮上移效果
-    - section-card: 内容区块卡片样式，左侧带有蓝色边框
-    - back-btn: 返回按钮样式
-
-    导航栏说明：
-    - 左侧：健身打卡品牌名称，点击返回首页
-    - 中间：健身指南模块入口链接
-    - 右侧：根据用户登录状态显示不同内容
-        - 已登录：显示用户名和退出登录按钮
-        - 未登录：显示登录按钮
+    设计特点：
+    - 渐变背景色
+    - 半透明磨砂效果卡片
+    - 模糊背景滤镜
+    - 柔和阴影和发光边框
+    - 悬浮动画效果
 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- 字符编码设置为 UTF-8，支持中文显示 -->
     <meta charset="UTF-8">
-    <!-- 响应式视口设置，确保移动设备正确渲染 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 页面标题，使用 block 允许子模板自定义 -->
     <title>{% block title %}健身前你该知道的{% endblock %}</title>
 
-    <!-- 引入 Bootstrap 4 CSS 样式库，提供响应式布局和UI组件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <!-- 自定义页面样式 -->
     <style>
-        /* 页面背景色设置为浅灰色 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f8f9fa;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #73a2e9 50%, #53a3f8 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* 导航栏阴影效果，增加层次感 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 导航栏 - 磨砂玻璃效果 */
         .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.15) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1rem;
+            position: relative;
+            z-index: 1000;
         }
 
-        /* 模块卡片样式 */
-        .module-card {
-            margin-bottom: 20px;
-            /* 悬浮动画效果：300ms缓动过渡 */
-            transition: transform 0.3s ease;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #fff !important;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
         }
 
-        /* 模块卡片悬浮效果：向上移动5px并加深阴影 */
-        .module-card:hover {
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            padding: 0.5rem 1rem !important;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .navbar-text {
+            color: rgba(255, 255, 255, 0.95) !important;
+            font-weight: 500;
+        }
+
+        /* 按钮样式 */
+        .btn-light {
+            background: rgba(255, 255, 255, 0.25) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: #fff !important;
+            font-weight: 500;
+            border-radius: 25px;
+            padding: 0.4rem 1.2rem !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.4) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 主内容区域 */
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 磨砂玻璃卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
         }
 
-        /* 内容区块卡片样式，左侧带有蓝色边框 */
-        .section-card {
-            margin-bottom: 25px;
-            border-left: 4px solid #007bff;
-        }
-
-        /* 返回按钮样式 */
-        .back-btn {
+        /* 模块卡片 */
+        .module-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 2rem;
             margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .module-card .card-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .module-card .card-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* 按钮样式 */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            color: #fff;
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 0.5rem 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-secondary {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
+            padding: 0.5rem 1.3rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: #fff;
+        }
+
+        /* Jumbotron 磨砂效果 */
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 25px;
+            padding: 3rem !important;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .jumbotron h1 {
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .jumbotron .lead {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+
+        /* 警告框磨砂效果 */
+        .alert {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            color: #fff;
+        }
+
+        /* 内容区块卡片 */
+        .section-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-left-color: #fff;
+        }
+
+        .section-card .card-title {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .section-card .card-text {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            margin-bottom: 1.5rem;
+        }
+
+        /* 卡片body内容 */
+        .card-body {
+            background: transparent;
+        }
+
+        /* 输入框磨砂效果 */
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 表格磨砂效果 */
+        .table {
+            color: #fff;
+        }
+
+        .table thead th {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+            border: none;
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) td {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .jumbotron {
+                padding: 2rem !important;
+            }
+
+            .module-card {
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏：固定在页面顶部，深蓝色背景 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <!-- 品牌标识，点击返回首页 -->
-            <a class="navbar-brand" href="{% url 'home' %}">健身打卡</a>
+            <a class="navbar-brand" href="{% url 'home' %}">🏋️ 健身打卡</a>
 
-            <!-- 移动端折叠菜单按钮 -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- 导航链接区域 -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <!-- 首页链接 -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">首页</a>
+                        <a class="nav-link" href="{% url 'home' %}">🏠 首页</a>
                     </li>
 
-                    <!-- 健身指南模块链接 -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'fitness_guide_home' %}">健身前你该知道的</a>
+                        <a class="nav-link" href="{% url 'fitness_guide_home' %}">📚 健身指南</a>
                     </li>
 
-                    <!-- 根据用户登录状态显示不同内容 -->
                     {% if user.is_authenticated %}
-                        <!-- 已登录状态：显示用户名和退出按钮 -->
                         <li class="nav-item">
-                            <span class="navbar-text text-white mr-3">欢迎, {{ user.username }}</span>
+                            <span class="navbar-text mr-3">👤 {{ user.username }}</span>
                         </li>
                         <li class="nav-item">
-                            <!-- 退出登录表单，使用POST方法防止CSRF攻击 -->
                             <form method="post" action="{% url 'logout' %}" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-sm">退出登录</button>
+                                <button type="submit" class="btn btn-light btn-sm">退出</button>
                             </form>
                         </li>
                     {% else %}
-                        <!-- 未登录状态：显示登录按钮 -->
                         <li class="nav-item">
                             <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
                         </li>
@@ -122,17 +432,13 @@
         </div>
     </nav>
 
-    <!-- 主内容区域容器，上下margin为4个单位 -->
+    <!-- 主内容区域 -->
     <div class="container mt-4">
-        <!-- 内容block，子模板需要在此位置覆写 -->
-        {% block content %}<!-- 子模板的内容会替换这里 -->{% endblock %}
+        {% block content %}{% endblock %}
     </div>
 
-    <!-- 引入 jQuery 库（Bootstrap JS 依赖） -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <!-- 引入 Popper.js 库（Bootstrap JS 依赖，用于工具提示和弹出框） -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <!-- 引入 Bootstrap 4 JS 库，提供交互功能 -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,88 +1,58 @@
-<!--
-    饮食建议列表页模板
-
-    本页面按类别显示所有饮食建议，采用不同于器材列表的样式。
-    使用时间线样式展示，每条建议带有配图展示。
-
-    页面功能：
-    - 显示该类别下的所有饮食建议
-    - 管理员可添加新的饮食建议
-    - 每条建议显示配图、标题、简介和视频链接
-
-    后端传递的上下文变量：
-    - title: 页面标题
-    - category: 类别标识符
-    - diet_items: 饮食建议查询集
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- 返回按钮 -->
         <div class="back-btn">
-            <a href="{% url 'diet_home' %}" class="btn btn-outline-success">← 返回饮食分类</a>
+            <a href="{% url 'diet_home' %}" class="btn btn-outline-primary">← 返回饮食分类</a>
         </div>
 
-        <!-- 页面标题区域，绿色主题 -->
-        <div class="jumbotron bg-light p-4 mb-4 border-left border-success" style="border-left-width: 5px;">
-            <h1 class="display-4">{{ title }}</h1>
+        <div class="jumbotron">
+            <h1>{{ title }}</h1>
 
-            <!-- 管理员添加按钮 -->
             {% if user.is_staff %}
-            <a href="{% url 'diet_create' category %}" class="btn btn-success">+ 添加建议</a>
+            <a href="{% url 'diet_create' category %}" class="btn btn-primary" style="margin-top: 1rem;">+ 添加建议</a>
             {% endif %}
         </div>
     </div>
 </div>
 
-<!-- 饮食建议列表，使用时间线样式 -->
 <div class="row">
     <div class="col-12">
         {% if diet_items %}
         <div class="timeline">
             {% for item in diet_items %}
-            <div class="timeline-item mb-4">
-                <div class="card">
-                    <div class="row no-gutters">
-                        <!-- 左侧图片区域 -->
-                        {% if item.image %}
-                        <div class="col-md-4">
-                            <img src="{{ item.image.url }}" class="card-img h-100" alt="{{ item.title }}"
-                                 style="object-fit: cover; min-height: 200px;">
-                        </div>
-                        {% endif %}
+            <div class="glass-card mb-4" style="padding: 0; overflow: hidden;">
+                <div class="row no-gutters">
+                    {% if item.image %}
+                    <div class="col-md-4">
+                        <img src="{{ item.image.url }}" class="card-img h-100" alt="{{ item.title }}" style="object-fit: cover; min-height: 200px;">
+                    </div>
+                    {% endif %}
 
-                        <!-- 右侧内容区域 -->
-                        <div class="col-md-{% if item.image %}8{% else %}12{% endif %}">
-                            <div class="card-body">
-                                <!-- 标题和推荐标识 -->
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <h4 class="card-title">{{ item.title }}</h4>
-                                    {% if item.is_featured %}
-                                    <span class="badge badge-warning">推荐</span>
-                                    {% endif %}
-                                </div>
+                    <div class="col-md-{% if item.image %}8{% else %}12{% endif %}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h4 class="card-title" style="color: #fff;">{{ item.title }}</h4>
+                                {% if item.is_featured %}
+                                <span class="badge" style="background: rgba(255,193,7,0.9); color: #fff;">推荐</span>
+                                {% endif %}
+                            </div>
 
-                                <!-- 内容预览 -->
-                                <p class="card-text text-muted">{{ item.content|truncatewords:30 }}</p>
+                            <p class="card-text" style="color: rgba(255,255,255,0.8);">{{ item.content|truncatewords:30 }}</p>
 
-                                <!-- 操作按钮 -->
-                                <div class="btn-group mt-2">
-                                    {% if item.video_url %}
-                                    <a href="{{ item.video_url }}" target="_blank" class="btn btn-sm btn-danger">观看视频</a>
-                                    {% endif %}
-                                    <a href="{% url 'diet_detail' category item.id %}" class="btn btn-sm btn-success">查看详情</a>
+                            <div class="btn-group mt-2">
+                                {% if item.video_url %}
+                                <a href="{{ item.video_url }}" target="_blank" class="btn btn-primary btn-sm">观看视频</a>
+                                {% endif %}
+                                <a href="{% url 'diet_detail' category item.id %}" class="btn btn-outline-primary btn-sm">查看详情</a>
 
-                                    <!-- 管理员操作 -->
-                                    {% if user.is_staff %}
-                                    <a href="{% url 'diet_update' category item.id %}" class="btn btn-sm btn-warning">编辑</a>
-                                    <a href="{% url 'diet_delete' category item.id %}" class="btn btn-sm btn-outline-danger">删除</a>
-                                    {% endif %}
-                                </div>
+                                {% if user.is_staff %}
+                                <a href="{% url 'diet_update' category item.id %}" class="btn btn-outline-primary btn-sm">编辑</a>
+                                <a href="{% url 'diet_delete' category item.id %}" class="btn btn-outline-secondary btn-sm" style="border-color: rgba(220,53,69,0.5); color: #ff6b6b;">删除</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -91,20 +61,11 @@
             {% endfor %}
         </div>
         {% else %}
-        <!-- 无内容提示 -->
-        <div class="alert alert-info">
-            暂无{{ title }}相关内容{% if user.is_staff %}，点击"添加建议"开始创建{% endif %}
+        <div class="glass-card" style="text-align: center; padding: 3rem;">
+            <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🍽️</span>
+            <p style="color: rgba(255,255,255,0.8);">暂无{{ title }}相关内容{% if user.is_staff %}，点击"添加建议"开始创建{% endif %}</p>
         </div>
         {% endif %}
     </div>
 </div>
-
-<style>
-    .timeline-item .card {
-        transition: box-shadow 0.3s ease;
-    }
-    .timeline-item .card:hover {
-        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
-    }
-</style>
 {% endblock %}

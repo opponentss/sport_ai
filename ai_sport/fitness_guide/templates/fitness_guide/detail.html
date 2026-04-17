@@ -1,115 +1,90 @@
-<!--
-    健身知识详情页模板
-
-    本页面用于显示健身知识的详细内容，包括饮食建议、肌肉认识、器材认识等。
-    采用可复用的设计，通过后端传递的 sections 列表动态渲染内容区块。
-
-    功能特点：
-    - 返回按钮可返回健身知识首页或主首页
-    - 动态内容区块渲染，根据 title 显示不同的实用建议
-    - 页面底部提供"下一个"导航，串联学习流程
-
-    后端传递的上下文变量：
-    - title: 页面标题（如"饮食建议"、"肌肉认识"等）
-    - sections: 内容区块列表，每个区块包含 title 和 content
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题，格式为"标题 - 健身前你该知道的" -->
-{% block title %}{{ title }} - 健身前你该知道的{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <!-- 返回按钮区域 -->
         <div class="back-btn">
-            <!-- 返回健身知识首页 -->
-            <a href="{% url 'fitness_guide_home' %}" class="btn btn-outline-primary">← 返回健身知识首页</a>
-            <!-- 返回主首页 -->
-            <a href="{% url 'home' %}" class="btn btn-outline-secondary ml-2">返回主首页</a>
-        </div>
-
-        <!-- 页面主标题区域 -->
-        <div class="jumbotron bg-light p-4 mb-4">
-            <h1 class="display-4">{{ title }}</h1>
-            <p class="lead">深入了解{{ title }}相关知识，为你的健身之路打下坚实基础</p>
+            <a href="{{ back_url }}" class="btn btn-outline-primary">← 返回</a>
         </div>
     </div>
 </div>
 
-<!-- 内容区块渲染区域 -->
 <div class="row">
     <div class="col-12">
-        <!-- 遍历后端传递的 sections 列表 -->
-        {% for section in sections %}
-        <div class="card section-card">
-            <div class="card-body">
-                <!-- 内容区块标题，蓝色文字 -->
-                <h5 class="card-title text-primary">{{ section.title }}</h5>
-                <!-- 内容区块正文 -->
-                <p class="card-text">{{ section.content }}</p>
+        <div class="glass-card" style="padding: 0; overflow: hidden;">
+            {% if image %}
+            <div class="text-center" style="background: rgba(255,255,255,0.1); padding: 2rem;">
+                <img src="{{ image }}" alt="{{ title }}" style="max-height: 400px; object-fit: contain; border-radius: 12px;">
             </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
+            {% endif %}
 
-<!-- 实用建议区域，根据不同的 title 显示不同的建议内容 -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0">实用建议</h5>
-            </div>
-            <div class="card-body">
-                <!-- 饮食建议的实用建议 -->
-                {% if title == '饮食建议' %}
-                <ul>
-                    <li>每天喝足够的水，健身期间需要更多水分</li>
-                    <li>避免空腹健身，也不要在饱腹后立即运动</li>
-                    <li>可以准备一些健康零食，如坚果、酸奶等</li>
-                    <li>记录饮食日记，了解自己的营养摄入情况</li>
-                </ul>
+            <div class="card-body" style="padding: 2rem;">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <div>
+                        <h2 style="color: #fff; margin-bottom: 0.5rem;">{{ title }}</h2>
+                        {% if category %}
+                        <span class="badge" style="background: rgba(102,126,234,0.8); color: #fff;">{{ category }}</span>
+                        {% endif %}
+                        {% if is_featured %}
+                        <span class="badge" style="background: rgba(255,193,7,0.9); color: #fff; margin-left: 0.5rem;">精选推荐</span>
+                        {% endif %}
+                    </div>
+                    {% if video_url %}
+                    <a href="{{ video_url }}" target="_blank" class="btn btn-primary">
+                        ▶ 观看视频
+                    </a>
+                    {% endif %}
+                </div>
 
-                <!-- 肌肉认识的实用建议 -->
-                {% elif title == '肌肉认识' %}
-                <ul>
-                    <li>训练前了解目标肌肉的功能和位置</li>
-                    <li>注意肌肉的平衡发展，避免只练某些部位</li>
-                    <li>学习正确的肌肉收缩感觉，提高训练效果</li>
-                    <li>给肌肉足够的恢复时间，避免过度训练</li>
-                </ul>
+                {% if description %}
+                <p class="lead" style="color: rgba(255,255,255,0.95); line-height: 1.8;">{{ description }}</p>
+                {% endif %}
 
-                <!-- 器材认识的实用建议 -->
-                {% elif title == '器材认识' %}
-                <ul>
-                    <li>初次使用器材前，请教练或工作人员指导</li>
-                    <li>调整器材到适合自己的位置和重量</li>
-                    <li>使用后擦拭器材，保持卫生</li>
-                    <li>注意安全，使用保护装置如腰带、护腕等</li>
-                </ul>
+                {% if content %}
+                <hr style="border-color: rgba(255,255,255,0.2); margin: 2rem 0;">
+
+                <div class="content-section">
+                    {{ content|linebreaks }}
+                </div>
+                {% endif %}
+
+                {% if user.is_staff %}
+                <div class="mt-5" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1rem;">
+                    <p style="color: rgba(255,255,255,0.7); margin-bottom: 0.5rem;">管理员操作：</p>
+                    <div class="btn-group">
+                        {% if edit_url %}
+                        <a href="{{ edit_url }}" class="btn btn-outline-primary btn-sm">编辑</a>
+                        {% endif %}
+                        {% if delete_url %}
+                        <a href="{{ delete_url }}" class="btn btn-outline-secondary btn-sm" style="border-color: rgba(220,53,69,0.5); color: #ff6b6b;">删除</a>
+                        {% endif %}
+                    </div>
+                </div>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
 
-<!-- 页面底部导航区域，用于串联学习流程 -->
-<div class="row mt-4">
-    <div class="col-12 text-center">
-        <div class="btn-group" role="group">
-            <!-- 根据当前页面 title 显示不同的"下一个"链接 -->
-            {% if title == '饮食建议' %}
-                <!-- 饮食建议的下一个是肌肉认识 -->
-                <a href="{% url 'muscle_knowledge' %}" class="btn btn-outline-primary">下一个：肌肉认识 →</a>
-            {% elif title == '肌肉认识' %}
-                <!-- 肌肉认识的下一个是器材认识 -->
-                <a href="{% url 'equipment_knowledge' %}" class="btn btn-outline-primary">下一个：器材认识 →</a>
-            {% elif title == '器材认识' %}
-                <!-- 器材认识循环回饮食建议 -->
-                <a href="{% url 'diet_advice' %}" class="btn btn-outline-primary">重新学习：饮食建议 →</a>
-            {% endif %}
-        </div>
-    </div>
-</div>
+<style>
+    .content-section {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.95);
+    }
+    .content-section h3, .content-section h4 {
+        color: #fff;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .content-section ul, .content-section ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .content-section li {
+        margin-bottom: 0.5rem;
+    }
+</style>
 {% endblock %}

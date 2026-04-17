@@ -1,32 +1,16 @@
-<!--
-    健身指南模块首页模板
-
-    本页面展示健身指南的三大模块入口：
-    1. 饮食建议 - 了解健身前后的饮食原则
-    2. 肌肉认识 - 认识主要肌肉群及其功能
-    3. 器材认识 - 熟悉健身房常见器材
-
-    继承自 base.html，使用统一的导航栏和样式。
-    页面底部包含健身小贴士卡片，提供实用建议。
--->
 {% extends 'fitness_guide/base.html' %}
 
-<!-- 页面标题，使用后端传递的 title 变量 -->
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<!-- 返回首页按钮 -->
 <div class="row">
     <div class="col-12">
         <div class="back-btn">
             <a href="{% url 'home' %}" class="btn btn-outline-primary">← 返回首页</a>
         </div>
 
-        <!-- 页面主标题区域，使用 Bootstrap jumbotron 组件 -->
-        <div class="jumbotron bg-light p-4 mb-4">
-            <!-- 显示从后端传递的页面标题 -->
-            <h1 class="display-4">{{ title }}</h1>
-            <!-- 显示页面描述信息 -->
+        <div class="jumbotron">
+            <h1>{{ title }}</h1>
             <p class="lead">{{ description }}</p>
             <hr class="my-4">
             <p>选择以下模块开始学习健身基础知识：</p>
@@ -34,19 +18,13 @@
     </div>
 </div>
 
-<!-- 模块卡片区域，使用 Bootstrap 栅格系统布局 -->
 <div class="row">
-    <!-- 遍历后端传递的 modules 列表，每个元素生成一个卡片 -->
     {% for module in modules %}
     <div class="col-md-4">
-        <!-- 模块卡片，带有悬浮动画效果 -->
-        <div class="card module-card">
+        <div class="glass-card module-card">
             <div class="card-body">
-                <!-- 模块名称 -->
                 <h5 class="card-title">{{ module.name }}</h5>
-                <!-- 模块描述 -->
                 <p class="card-text">{{ module.description }}</p>
-                <!-- 进入学习按钮，链接到对应的URL（由URL名称动态生成） -->
                 <a href="{% url module.url %}" class="btn btn-primary">进入学习</a>
             </div>
         </div>
@@ -54,17 +32,14 @@
     {% endfor %}
 </div>
 
-<!-- 健身小贴士区域 -->
 <div class="row mt-5">
     <div class="col-12">
-        <div class="card">
-            <!-- 小贴士标题区域，蓝色背景 -->
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0">健身小贴士</h5>
+        <div class="glass-card">
+            <div class="card-header" style="background: rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <h5 class="mb-0" style="color: #fff;">💡 健身小贴士</h5>
             </div>
             <div class="card-body">
-                <!-- 健身注意事项列表 -->
-                <ul>
+                <ul style="color: rgba(255,255,255,0.9); line-height: 2;">
                     <li>健身前一定要进行充分的热身，避免运动损伤</li>
                     <li>保持正确的姿势比追求大重量更重要</li>
                     <li>健身需要持之以恒，每周至少3次才能看到效果</li>
