@@ -31,7 +31,7 @@
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #73a2e9 50%, #53a3f8 100%);
+            background: #88CCCC;
             background-attachment: fixed;
             position: relative;
             overflow-x: hidden;
@@ -414,7 +414,7 @@
 
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <span class="navbar-text mr-3">👤 {{ user.username }}</span>
+                            <a href="{% url 'user_profile' %}" class="navbar-text" style="color: #fff; text-decoration: none;">👤 {{ user.username }}</a>
                         </li>
                         <li class="nav-item">
                             <form method="post" action="{% url 'logout' %}" class="d-inline">
@@ -422,11 +422,11 @@
                                 <button type="submit" class="btn btn-light btn-sm">退出</button>
                             </form>
                         </li>
-                    {% else %}
+                        {% else %}
                         <li class="nav-item">
                             <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
                         </li>
-                    {% endif %}
+                        {% endif %}
                 </ul>
             </div>
         </div>

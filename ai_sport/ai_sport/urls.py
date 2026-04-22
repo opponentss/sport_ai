@@ -79,6 +79,9 @@ urlpatterns = [
 
     # 用户注册页面：使用自定义视图处理
     path('accounts/register/', views.register, name='register'),
+
+    # 用户个人中心
+    path('profile/', views.user_profile, name='user_profile'),
 ]
 
 

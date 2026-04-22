@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'meals',                       # 餐饮管理模块
     'sleep',                       # 睡眠记录模块
     'fitness_guide',               # 健身指南模块
+    'user_profile',                # 用户个人中心模块
 ]
 
 

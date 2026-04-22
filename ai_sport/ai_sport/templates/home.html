@@ -1,6 +1,5 @@
 <!--
     项目首页模板 - 磨砂玻璃风格
-
     本页面是整个应用的入口页面，展示四大功能模块入口。
     使用 Bootstrap 栅格系统和磨砂玻璃设计风格。
 -->
@@ -22,7 +21,7 @@
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: #88CCCC;
             background-attachment: fixed;
             position: relative;
             overflow-x: hidden;
@@ -36,60 +35,95 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.08) 0%, transparent 30%);
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
             pointer-events: none;
             z-index: 0;
         }
 
         .navbar {
-            background: rgba(255, 255, 255, 0.1) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.18) !important;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 0.6rem 1rem;
             position: relative;
             z-index: 1000;
-            
-            
-            display: flex;      
-            justify-content: space-between auto;          
-            margin-right: center;
+            transition: all 0.3s ease;
         }
 
         .navbar-brand {
-            font-weight: 700;                /* 加粗字体，突出品牌 */
-            font-size: 1.5rem;              /* 相对于根元素字号 1.5 倍，一般约 24px */
-            color: #fff !important;         /* 强制白色文字，覆盖 Bootstrap 等框架默认色 */
-            text-shadow: 0 2px 15px rgba(0,0,0,0.2); /* 向下 2px 的柔和黑色阴影，增加立体感和可读性 */
-            letter-spacing: 2px;            /* 字间距拉开 2px，显得更精致、现代 */
-            
-
-             /* 居中方案：绝对定位（适合品牌始终居中，无视左右菜单） */
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            margin: 0;
-        }
-
-        .navbar-dark .navbar-nav .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border-radius: 20px;
-            padding: 0.5rem 1rem !important;
-        }
-
-        .navbar-dark .navbar-nav .nav-link:hover {
+            font-weight: 700;
+            font-size: 1.5rem;
             color: #fff !important;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            text-shadow: 0 2px 15px rgba(0,0,0,0.25);
+            letter-spacing: 1px;
+            transition: transform 0.3s ease;
         }
 
-        .navbar-text {
-            color: rgba(255, 255, 255, 0.95) !important;
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-toggler {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .user-avatar-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.2) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            color: #fff !important;
             font-weight: 500;
+            border-radius: 30px;
+            padding: 0.4rem 1rem 0.4rem 0.4rem !important;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .user-avatar-btn:hover {
+            background: rgba(255, 255, 255, 0.35) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .user-avatar-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-avatar-placeholder {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
         }
 
         .container {
@@ -113,7 +147,7 @@
 
         .hero-subtitle {
             font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.95);
+            color: rgb(255, 255, 255);
             font-weight: 300;
         }
 
@@ -136,6 +170,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            text-decoration: none;
         }
 
         .module-card::before {
@@ -145,7 +180,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #fff, rgba(255,255,255,0.5));
+            background: linear-gradient(90deg, #80e9e99b, rgba(230, 225, 225, 0.5));
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -154,6 +189,7 @@
             transform: translateY(-10px) scale(1.03);
             background: rgba(255, 255, 255, 0.28);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
         }
 
         .module-card:hover::before {
@@ -170,13 +206,13 @@
         .module-title {
             font-size: 1.4rem;
             font-weight: 700;
-            color: #fff;
+            color: #cc8888;
             margin-bottom: 0.8rem;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .module-desc {
-            color: rgba(255, 255, 255, 0.85);
+            color: rgb(255, 255, 255);
             font-size: 0.95rem;
             line-height: 1.6;
         }
@@ -184,20 +220,40 @@
         .btn-light {
             background: rgba(255, 255, 255, 0.25) !important;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
             color: #fff !important;
-            font-weight: 600;
+            font-weight: 500;
             border-radius: 25px;
-            padding: 0.5rem 1.5rem !important;
+            padding: 0.4rem 1.2rem !important;
             transition: all 0.3s ease;
         }
 
         .btn-light:hover {
             background: rgba(255, 255, 255, 0.4) !important;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             color: #fff;
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .module-card:nth-child(1) { animation: fadeInUp 0.6s ease 0.1s both; }
+        .module-card:nth-child(2) { animation: fadeInUp 0.6s ease 0.2s both; }
+        .module-card:nth-child(3) { animation: fadeInUp 0.6s ease 0.3s both; }
+        .module-card:nth-child(4) { animation: fadeInUp 0.6s ease 0.4s both; }
 
         @media (max-width: 768px) {
             .hero-title {
@@ -212,25 +268,32 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">健身打卡</a>
+            <a class="navbar-brand" href="{% url 'home' %}">🏋️ 健身打卡</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto user-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <span class="navbar-text mr-3">👤 {{ user.username }}</span>
+                            <a href="{% url 'user_profile' %}" class="user-avatar-btn">
+                                {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="头像" class="user-avatar-img">
+                                {% else %}
+                                <div class="user-avatar-placeholder">👤</div>
+                                {% endif %}
+                                <span>{{ user.username }}</span>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                            <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-sm">退出</button>
+                                <button type="submit" class="btn btn-light btn-sm">🚪 退出</button>
                             </form>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="btn btn-light btn-sm" href="{% url 'login' %}">登录</a>
+                            <a class="btn btn-light btn-sm" href="{% url 'login' %}">🔑 登录</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -245,25 +308,25 @@
         </div>
 
         <div class="module-grid">
-            <a href="{% url 'fitness_guide_home' %}" class="module-card" style="text-decoration: none;">
+            <a href="{% url 'fitness_guide_home' %}" class="module-card">
                 <span class="module-icon">📚</span>
                 <h3 class="module-title">健身指南</h3>
                 <p class="module-desc">了解健身基础知识，饮食建议，肌肉和器材认识</p>
             </a>
 
-            <a href="{% url 'checkin_list' %}" class="module-card" style="text-decoration: none;">
+            <a href="{% url 'checkin_list' %}" class="module-card">
                 <span class="module-icon">✅</span>
                 <h3 class="module-title">打卡记录</h3>
                 <p class="module-desc">记录你的健身活动，支持定位功能</p>
             </a>
 
-            <a href="{% url 'meal_list' %}" class="module-card" style="text-decoration: none;">
+            <a href="{% url 'meal_list' %}" class="module-card">
                 <span class="module-icon">🍽️</span>
                 <h3 class="module-title">三餐记录</h3>
                 <p class="module-desc">记录你的饮食情况，支持拍照和AI识别</p>
             </a>
 
-            <a href="{% url 'sleep_list' %}" class="module-card" style="text-decoration: none;">
+            <a href="{% url 'sleep_list' %}" class="module-card">
                 <span class="module-icon">😴</span>
                 <h3 class="module-title">作息记录</h3>
                 <p class="module-desc">记录你的睡眠情况，分析睡眠质量</p>

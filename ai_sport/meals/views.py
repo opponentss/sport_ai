@@ -152,7 +152,7 @@ def recognize_food(image_path):
 
     使用配置的DeepSeek API对餐食图片进行食物识别，
     返回识别出的食物名称、卡路里和数量信息。
-
+      
     Args:
         image_path (str): 图片文件的完整路径
 
@@ -160,10 +160,11 @@ def recognize_food(image_path):
         dict: 包含食物识别结果的字典
         None: 如果API调用失败或发生异常
     """
+
     try:
         with open(image_path, 'rb') as f:
             image_data = base64.b64encode(f.read()).decode('utf-8')
-
+        
         prompt = """分析这张食物图片，返回JSON格式：
         {"foods": [{"name": "名称", "calories": 数值, "quantity": "份量"}], "total_calories": 数值}"""
 
@@ -172,6 +173,7 @@ def recognize_food(image_path):
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {settings.FOOD_RECOGNITION_API_KEY}'
         }
+
 
         payload = {
             "model": "deepseek-chat",
@@ -245,3 +247,4 @@ def meal_delete(request, pk):
         meal.delete()
         return redirect('meal_list')
     return render(request, 'meals/meal_confirm_delete.html', {'meal': meal})
+
