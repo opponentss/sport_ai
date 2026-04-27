@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>训练中 - 轻松运动</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --surface: #222240;
+            --text: #c8c8d8;
+            --text-dim: #707088;
+            --accent: #7c8cf8;
+            --accent-dim: #5a6ad0;
+            --success: #4a9;
+            --warning: #da8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center;
+            padding: 30px 16px;
+            user-select: none;
+        }
+
+        .session-container {
+            width: 100%; max-width: 480px;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 20px;
+            flex: 1;
+        }
+
+        .back-link {
+            align-self: flex-start;
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.85rem; transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--accent); }
+
+        .plan-header {
+            text-align: center; margin-top: 10px;
+        }
+
+        .plan-header .plan-icon {
+            font-size: 3rem; display: block; margin-bottom: 10px;
+        }
+
+        .plan-header h2 {
+            font-size: 1.5rem; font-weight: 600; margin-bottom: 4px;
+        }
+
+        .plan-header p {
+            font-size: 0.85rem; color: var(--text-dim);
+            max-width: 320px; line-height: 1.5;
+        }
+
+        .timer-display {
+            font-size: 3rem; font-weight: 300;
+            font-variant-numeric: tabular-nums;
+            margin: 10px 0;
+            color: var(--accent);
+            letter-spacing: 3px;
+        }
+
+        .progress-bar-wrap {
+            width: 100%; height: 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px; overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%; background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+            border-radius: 4px; transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .exercise-card {
+            width: 100%; background: var(--surface);
+            border-radius: 20px; padding: 28px 24px;
+            text-align: center; border: 1px solid rgba(124, 140, 248, 0.1);
+            min-height: 180px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 12px;
+        }
+
+        .exercise-card .ex-name {
+            font-size: 1.3rem; font-weight: 500;
+        }
+
+        .exercise-card .ex-desc {
+            font-size: 0.9rem; color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .exercise-card .voice-guide {
+            font-size: 0.85rem; color: var(--accent);
+            font-style: italic; margin-top: 6px;
+            padding: 10px 16px;
+            background: rgba(124, 140, 248, 0.06);
+            border-radius: 10px;
+        }
+
+        .exercise-indicator {
+            display: flex; gap: 6px; margin: 10px 0;
+        }
+
+        .ex-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .ex-dot.done { background: var(--success); }
+        .ex-dot.current { background: var(--accent); transform: scale(1.5); }
+
+        .btn-group {
+            display: flex; gap: 12px; margin-top: auto;
+            padding-bottom: 20px;
+        }
+
+        .btn-action {
+            padding: 14px 28px; border-radius: 16px;
+            border: none; font-size: 1rem; font-weight: 500;
+            cursor: pointer; transition: all 0.25s ease;
+            font-family: inherit;
+        }
+
+        .btn-done {
+            background: var(--accent); color: #fff;
+        }
+
+        .btn-done:hover {
+            background: #8b9cff;
+            box-shadow: 0 6px 24px rgba(124, 140, 248, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-skip {
+            background: transparent; color: var(--text-dim);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .btn-skip:hover {
+            background: rgba(255,255,255,0.04); color: var(--text);
+        }
+
+        .completion-card {
+            width: 100%; max-width: 480px;
+            text-align: center; padding: 40px 0;
+        }
+
+        .completion-card .complete-icon {
+            font-size: 4rem; display: block; margin-bottom: 20px;
+        }
+
+        .completion-card h2 {
+            font-size: 1.5rem; margin-bottom: 8px;
+        }
+
+        .completion-card .xp-earned {
+            font-size: 1.2rem; color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .completion-card .achievement-list {
+            display: flex; flex-direction: column; gap: 8px;
+            margin: 16px 0; max-width: 320px; margin-left: auto; margin-right: auto;
+        }
+
+        .completion-card .ach-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 16px; background: var(--surface);
+            border-radius: 14px; border: 1px solid rgba(124, 140, 248, 0.2);
+        }
+
+        .completion-card .btn-home {
+            display: inline-block; margin-top: 20px;
+            padding: 14px 36px; background: var(--accent);
+            color: #fff; border-radius: 16px;
+            text-decoration: none; font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .completion-card .btn-home:hover {
+            background: #8b9cff;
+            box-shadow: 0 6px 24px rgba(124, 140, 248, 0.3);
+            text-decoration: none; color: #fff;
+        }
+
+        .level-up-banner {
+            background: linear-gradient(135deg, rgba(124,140,248,0.2), rgba(124,140,248,0.05));
+            border: 1px solid rgba(124, 140, 248, 0.4);
+            border-radius: 16px; padding: 16px;
+            margin: 16px 0; text-align: center;
+            animation: glow 2s ease infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px rgba(124,140,248,0.1); }
+            to { box-shadow: 0 0 30px rgba(124,140,248,0.2); }
+        }
+    </style>
+</head>
+<body>
+    {% if plan and exercises %}
+    <div class="session-container" id="sessionContainer">
+        <a href="{% url 'home' %}" class="back-link" id="backLink">← 返回</a>
+
+        <div class="plan-header">
+            <span class="plan-icon">{{ plan.icon }}</span>
+            <h2>{{ plan.name }}</h2>
+            <p>{{ plan.description }}</p>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">00:00</div>
+
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+
+        <div class="exercise-indicator" id="exerciseIndicator">
+            {% for ex in exercises %}
+                <div class="ex-dot" data-index="{{ forloop.counter0 }}"></div>
+            {% endfor %}
+        </div>
+
+        <div class="exercise-card" id="exerciseCard">
+            <div class="ex-name" id="exName"></div>
+            <div class="ex-desc" id="exDesc"></div>
+            <div class="voice-guide" id="voiceGuide"></div>
+        </div>
+
+        <div style="font-size:0.85rem;color:var(--text-dim);" id="progressText">
+            动作 1 / {{ exercises|length }}
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-action btn-skip" onclick="skipExercise()" id="btnSkip">
+                ⏭ 跳过此动作
+            </button>
+            <button class="btn-action btn-done" onclick="nextExercise()" id="btnNext">
+                完成 ✓
+            </button>
+        </div>
+    </div>
+
+    <div class="completion-card" id="completionCard" style="display:none;">
+        <span class="complete-icon" id="completeIcon">🎉</span>
+        <h2 id="completeTitle">训练完成</h2>
+        <div class="xp-earned" id="xpEarned"></div>
+        <div id="levelUpBanner"></div>
+        <div class="achievement-list" id="achievementList"></div>
+        <a href="{% url 'home' %}" class="btn-home">返回首页</a>
+    </div>
+
+    <form id="submitForm" method="post" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="status" id="formStatus">
+        <input type="hidden" name="exercises_done" id="formExercisesDone">
+        <input type="hidden" name="exercises_total" id="formExercisesTotal">
+    </form>
+
+    <script>
+        const exercises = [
+            {% for ex in exercises %}
+            {
+                name: "{{ ex.name|escapejs }}",
+                desc: "{{ ex.description|escapejs }}",
+                duration: {{ ex.duration_seconds }},
+                voice: "{{ ex.voice_guide|escapejs }}"
+            },
+            {% endfor %}
+        ];
+
+        let currentIndex = 0;
+        let timerInterval = null;
+        let remainingSeconds = exercises.length > 0 ? exercises[0].duration : 0;
+        let totalElapsed = 0;
+        let isPaused = false;
+        let exercisesDone = [];
+
+        function updateProgress() {
+            const total = exercises.length;
+            const done = exercisesDone.length;
+            const pct = total > 0 ? (done / total) * 100 : 0;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').textContent =
+                '动作 ' + (currentIndex + 1) + ' / ' + total;
+
+            document.querySelectorAll('.ex-dot').forEach(dot => {
+                const idx = parseInt(dot.dataset.index);
+                dot.classList.remove('done', 'current');
+                if (exercisesDone.includes(idx)) dot.classList.add('done');
+                else if (idx === currentIndex) dot.classList.add('current');
+            });
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(remainingSeconds / 60);
+            const secs = remainingSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        }
+
+        function loadExercise() {
+            if (currentIndex >= exercises.length) {
+                completeTraining('completed');
+                return;
+            }
+
+            const ex = exercises[currentIndex];
+            remainingSeconds = ex.duration;
+            document.getElementById('exName').textContent = ex.name;
+            document.getElementById('exDesc').textContent = ex.desc;
+            document.getElementById('voiceGuide').textContent = ex.voice;
+
+            updateTimerDisplay();
+            updateProgress();
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    remainingSeconds--;
+                    totalElapsed++;
+                    updateTimerDisplay();
+                    if (remainingSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        if (currentIndex < exercises.length - 1) {
+                            exercisesDone.push(currentIndex);
+                            currentIndex++;
+                            loadExercise();
+                        } else {
+                            exercisesDone.push(currentIndex);
+                            completeTraining('completed');
+                        }
+                    }
+                }
+            }, 1000);
+        }
+
+        function nextExercise() {
+            exercisesDone.push(currentIndex);
+            currentIndex++;
+            loadExercise();
+        }
+
+        function skipExercise() {
+            exercisesDone.push(currentIndex);
+            currentIndex++;
+            loadExercise();
+        }
+
+        function completeTraining(status) {
+            clearInterval(timerInterval);
+            document.getElementById('sessionContainer').style.display = 'none';
+            document.getElementById('completionCard').style.display = 'block';
+            document.getElementById('backLink').style.display = 'none';
+
+            const form = document.getElementById('submitForm');
+            document.getElementById('formStatus').value = status;
+            document.getElementById('formExercisesDone').value = exercisesDone.length;
+            document.getElementById('formExercisesTotal').value = exercises.length;
+
+            const formData = new FormData(form);
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                body: formData
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('completeIcon').textContent =
+                    status === 'completed' ? '🎉' : '👋';
+                document.getElementById('completeTitle').textContent =
+                    status === 'completed' ? '训练完成' : '部分完成';
+                document.getElementById('xpEarned').textContent =
+                    '+' + data.xp_earned + ' XP';
+
+                if (data.leveled_up) {
+                    document.getElementById('levelUpBanner').innerHTML =
+                        '<div class="level-up-banner">⚡ 升级！Lv.' + data.level + '</div>';
+                }
+
+                if (data.new_achievements && data.new_achievements.length > 0) {
+                    let html = '';
+                    data.new_achievements.forEach(a => {
+                        html += '<div class="ach-item">' +
+                            '<span>' + a.icon + '</span>' +
+                            '<div style="text-align:left;">' +
+                            '<div style="font-weight:500;">' + a.name + '</div>' +
+                            '<div style="font-size:0.8rem;color:var(--text-dim);">' + a.description + '</div>' +
+                            '</div></div>';
+                    });
+                    document.getElementById('achievementList').innerHTML = html;
+                }
+
+                form.submit();
+            })
+            .catch(() => {
+                form.submit();
+            });
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                isPaused = true;
+            }
+        });
+
+        loadExercise();
+    </script>
+    {% else %}
+    <div style="text-align:center;padding:60px 20px;color:var(--text-dim);">
+        <p style="font-size:1.5rem;margin-bottom:12px;">😕</p>
+        <p>训练方案未找到</p>
+        <a href="{% url 'home' %}" style="color:var(--accent);margin-top:16px;display:inline-block;">返回首页</a>
+    </div>
+    {% endif %}
+</body>
+</html>

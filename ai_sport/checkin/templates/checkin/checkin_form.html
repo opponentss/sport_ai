@@ -4,18 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>添加/编辑打卡</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1a1a2e;--surface:#222240;--text:#c8c8d8;--text-dim:#707088;--accent:#7c8cf8}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .container{max-width:600px;margin:0 auto;padding:24px 16px}
+        .header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+        .header a{color:var(--text-dim);text-decoration:none;font-size:.85rem}
+        .header a:hover{color:var(--accent)}
+        .header h1{font-size:1.3rem;font-weight:600}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;color:var(--text-dim);font-size:.85rem;margin-bottom:4px}
+        .form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:var(--text);padding:12px 14px;font-size:.9rem;font-family:inherit;transition:.2s}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 15px rgba(124,140,248,0.1)}
+        .form-group textarea{resize:vertical;min-height:80px}
+        .form-group select{appearance:none}
+        .form-group select option{background:var(--surface);color:var(--text)}
+        .btn-group{display:flex;gap:10px;margin-top:24px}
+        .btn{padding:12px 24px;border-radius:12px;font-size:.9rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
+        .btn-primary{background:var(--accent);color:#fff}
+        .btn-primary:hover{background:#8b9cff}
+        .btn-secondary{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08)}
+        .btn-secondary:hover{background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none}
+        .help-text{font-size:.75rem;color:var(--text-dim);margin-top:2px}
+        .errorlist{list-style:none;padding:0;margin:4px 0;font-size:.8rem;color:#e88}
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>添加/编辑打卡</h1>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'checkin_list' %}">← 返回</a>
+            <h1>{% if form.instance.pk %}编辑{% else %}添加{% endif %}打卡</h1>
+        </div>
         <form method="post">
             {% csrf_token %}
-            <div class="form-group">
-                {{ form.as_p }}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="help-text">{{ field.help_text }}</div>{% endif %}
+                    {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">保存</button>
+                <a href="{% url 'checkin_list' %}" class="btn btn-secondary">取消</a>
             </div>
-            <button type="submit" class="btn btn-primary">保存</button>
-            <a href="{% url 'checkin_list' %}" class="btn btn-secondary">取消</a>
         </form>
     </div>
 </body>

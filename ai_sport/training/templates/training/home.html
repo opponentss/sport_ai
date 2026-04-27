@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻松运动</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --surface: #222240;
+            --surface-hover: #2a2a50;
+            --text: #c8c8d8;
+            --text-dim: #707088;
+            --accent: #7c8cf8;
+            --accent-dim: #5a6ad0;
+            --success: #4a9;
+            --warning: #da8;
+            --card-radius: 20px;
+            --transition: 0.25s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(124, 140, 248, 0.06) 0%, transparent 70%),
+                        radial-gradient(ellipse at 80% 100%, rgba(124, 140, 248, 0.03) 0%, transparent 50%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .app-container {
+            position: relative; z-index: 1;
+            max-width: 600px; margin: 0 auto;
+            min-height: 100vh; padding: 0 16px 100px;
+        }
+
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 0; position: relative;
+        }
+
+        .top-bar .user-info {
+            display: flex; align-items: center; gap: 12px;
+        }
+
+        .top-bar .avatar-area {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: var(--surface); display: flex;
+            align-items: center; justify-content: center;
+            border: 2px solid rgba(124, 140, 248, 0.3);
+            cursor: pointer; transition: var(--transition);
+        }
+
+        .top-bar .avatar-area:hover {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .top-bar .username {
+            font-size: 0.95rem; color: var(--text-dim);
+        }
+
+        .top-bar .level-badge {
+            font-size: 0.8rem; color: var(--accent);
+            background: rgba(124, 140, 248, 0.1);
+            padding: 3px 10px; border-radius: 12px;
+        }
+
+        .top-bar .nav-links { display: flex; gap: 16px; }
+
+        .top-bar .nav-links a {
+            color: var(--text-dim); text-decoration: none;
+            font-size: 0.9rem; transition: var(--transition);
+            padding: 6px 0; border-bottom: 2px solid transparent;
+        }
+
+        .top-bar .nav-links a:hover {
+            color: var(--accent); border-bottom-color: var(--accent);
+        }
+
+        .streak-bar {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 16px; margin: 8px 0 24px;
+            background: var(--surface); border-radius: 14px;
+            font-size: 0.9rem;
+        }
+
+        .streak-bar .streak-fire { font-size: 1.2rem; }
+        .streak-bar .streak-text { color: var(--text-dim); }
+        .streak-bar .streak-num { color: var(--warning); font-weight: 600; }
+
+        .xp-bar-wrap {
+            flex: 1; margin-left: 12px;
+            height: 6px; background: rgba(255,255,255,0.06);
+            border-radius: 3px; overflow: hidden;
+        }
+
+        .xp-bar-fill {
+            height: 100%; background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+            border-radius: 3px; transition: width 0.5s ease;
+        }
+
+        .section-title {
+            font-size: 1rem; font-weight: 500;
+            color: var(--text-dim); margin: 28px 0 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #2a2a5a 0%, #1e1e45 100%);
+            border: 1px solid rgba(124, 140, 248, 0.2);
+            border-radius: var(--card-radius);
+            padding: 28px 24px; text-align: center;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+
+        .hero-card .hero-emoji {
+            font-size: 2.5rem; margin-bottom: 8px;
+        }
+
+        .hero-card .hero-title {
+            font-size: 1.3rem; font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .hero-card .hero-subtitle {
+            font-size: 0.85rem; color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+
+        .btn-start {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent); color: #fff;
+            border: none; border-radius: 16px;
+            padding: 14px 36px; font-size: 1.1rem;
+            font-weight: 600; cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            background: #8b9cff; transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124, 140, 248, 0.3);
+            color: #fff; text-decoration: none;
+        }
+
+        .btn-dont-want {
+            display: inline-block; margin-top: 12px;
+            font-size: 0.83rem; color: var(--text-dim);
+            text-decoration: none; transition: var(--transition);
+            padding: 6px 14px; border-radius: 10px;
+        }
+
+        .btn-dont-want:hover {
+            color: var(--text);
+            background: rgba(255,255,255,0.04);
+            text-decoration: none;
+        }
+
+        .plan-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px; margin-bottom: 24px;
+        }
+
+        .plan-card {
+            background: var(--surface); border-radius: 16px;
+            padding: 18px 16px; text-decoration: none;
+            border: 1px solid transparent;
+            transition: var(--transition); cursor: pointer;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+
+        .plan-card:hover {
+            border-color: rgba(124, 140, 248, 0.3);
+            background: var(--surface-hover);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        .plan-card .plan-icon { font-size: 1.5rem; }
+        .plan-card .plan-name { font-weight: 500; color: var(--text); font-size: 0.95rem; }
+        .plan-card .plan-duration { font-size: 0.8rem; color: var(--text-dim); }
+        .plan-card .plan-tag { font-size: 0.72rem; color: var(--accent); }
+
+        .history-list {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .history-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; background: var(--surface);
+            border-radius: 12px; font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .history-item .hist-icon { font-size: 1.3rem; }
+        .history-item .hist-name { flex: 1; }
+        .history-item .hist-status {
+            font-size: 0.78rem; padding: 3px 10px;
+            border-radius: 8px; font-weight: 500;
+        }
+
+        .hist-status.completed { color: var(--success); background: rgba(68, 170, 153, 0.1); }
+        .hist-status.partial { color: var(--warning); background: rgba(221, 170, 136, 0.1); }
+        .hist-status.skipped { color: var(--text-dim); background: rgba(255,255,255,0.04); }
+
+        .hist-xp { font-size: 0.8rem; color: var(--accent); }
+
+        .empty-state {
+            text-align: center; padding: 32px 0;
+            color: var(--text-dim); font-size: 0.9rem;
+        }
+
+        .footer-spacer { height: 40px; }
+
+        .achievement-popup {
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            border: 1px solid var(--accent);
+            border-radius: 16px; padding: 16px 24px;
+            z-index: 100; display: none;
+            text-align: center; animation: popIn 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="top-bar">
+            <div class="user-info">
+                <a href="{% url 'settings' %}" class="avatar-area" title="设置">
+                    <span style="font-size:1.3rem;">🧑</span>
+                </a>
+                <div>
+                    <div class="username">{% if profile.anonymous_mode %}匿名用户{% else %}{{ user.username }}{% endif %}</div>
+                    <span class="level-badge">Lv.{{ profile.level }}</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'achievements' %}">成就</a>
+                <form method="post" action="{% url 'logout' %}" style="margin:0;">
+                    {% csrf_token %}
+                    <a href="#" onclick="this.parentNode.submit();return false;">退出</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="streak-bar">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-text">连续</span>
+            <span class="streak-num">{{ profile.streak_days }} 天</span>
+            <div class="xp-bar-wrap">
+                <div class="xp-bar-fill" style="width:{{ xp_progress }}%;"></div>
+            </div>
+            <span style="font-size:0.8rem;color:var(--text-dim);">{{ profile.xp }} / {{ profile.xp|add:xp_to_next }} XP</span>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div style="background:rgba(68,170,153,0.1);border:1px solid rgba(68,170,153,0.2);border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:0.85rem;color:var(--success);text-align:center;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="hero-card">
+            <div class="hero-emoji">{% if has_trained_today %}✅{% else %}🏠{% endif %}</div>
+            <div class="hero-title">
+                {% if has_trained_today %}
+                    今天已经动过了
+                {% else %}
+                    准备好了吗？
+                {% endif %}
+            </div>
+            <div class="hero-subtitle">
+                {% if has_trained_today %}
+                    休息也是训练的一部分，明天见。
+                {% else %}
+                    一键开始今日推荐，不用想太多。
+                {% endif %}
+            </div>
+            {% if not has_trained_today %}
+                <a href="{% url 'quick_action' 'recommend' %}" class="btn-start">
+                    ⚡ 开始今日推荐
+                </a>
+                <br>
+            {% endif %}
+            <a href="{% url 'quick_action' 'dont_want' %}" class="btn-dont-want">
+                😌 今天不想动
+            </a>
+        </div>
+
+        <div class="section-title">选择训练方案</div>
+        <div class="plan-grid">
+            {% for plan in plans %}
+                <a href="{% url 'training_session' plan.id %}" class="plan-card">
+                    <span class="plan-icon">{{ plan.icon }}</span>
+                    <span class="plan-name">{{ plan.name }}</span>
+                    <span class="plan-duration">{{ plan.duration_minutes }} 分钟</span>
+                    <span class="plan-tag">{{ plan.get_mood_tag_display }}</span>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="section-title">最近训练</div>
+        <div class="history-list">
+            {% if recent_sessions %}
+                {% for session in recent_sessions %}
+                    <div class="history-item">
+                        <span class="hist-icon">{{ session.plan.icon|default:'🏠' }}</span>
+                        <span class="hist-name">{{ session.plan.name|default:'训练' }}</span>
+                        <span class="hist-status {{ session.status }}">{{ session.get_status_display }}</span>
+                        <span class="hist-xp">+{{ session.xp_earned }}</span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">还没有训练记录<br>点击上方按钮开始第一次吧</div>
+            {% endif %}
+        </div>
+
+        <div class="footer-spacer"></div>
+    </div>
+
+    <div id="achievementPopup" class="achievement-popup"></div>
+
+    <script>
+    {% if not has_trained_today %}
+    document.querySelector('.hero-card').style.animation = 'fadeInUp 0.5s ease';
+    {% endif %}
+    </script>
+</body>
+</html>

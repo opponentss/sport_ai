@@ -18,14 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.shortcuts import render
 from django.contrib.auth import views as auth_views
 
-def home(request):
-    return render(request, 'home.html')
-
 urlpatterns = [
-    path('', home, name='home'),
+    path('', include('training.urls')),
     path('admin/', admin.site.urls),
     path('checkin/', include('checkin.urls')),
     path('meals/', include('meals.urls')),

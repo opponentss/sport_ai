@@ -4,16 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>确认删除</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1a1a2e;--surface:#222240;--text:#c8c8d8;--text-dim:#707088;--danger:#e05555;--accent:#7c8cf8}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .card{background:var(--surface);border:1px solid rgba(255,255,255,0.05);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;text-align:center}
+        .card h2{font-size:1.3rem;margin-bottom:12px}
+        .card p{color:var(--text-dim);margin-bottom:24px;font-size:.9rem}
+        .btn-group{display:flex;gap:10px;justify-content:center}
+        .btn{padding:12px 24px;border-radius:12px;font-size:.9rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
+        .btn-danger{background:rgba(224,85,85,0.15);color:var(--danger)}
+        .btn-danger:hover{background:rgba(224,85,85,0.25)}
+        .btn-cancel{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08);padding:12px 24px;border-radius:12px;font-size:.9rem;text-decoration:none;transition:.2s}
+        .btn-cancel:hover{background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none}
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>确认删除</h1>
+    <div class="card">
+        <h2>确认删除</h2>
         <p>确定要删除打卡记录：{{ checkin.activity }} 吗？</p>
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">删除</button>
-            <a href="{% url 'checkin_list' %}" class="btn btn-secondary">取消</a>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-danger">删除</button>
+                <a href="{% url 'checkin_list' %}" class="btn-cancel">取消</a>
+            </div>
         </form>
     </div>
 </body>

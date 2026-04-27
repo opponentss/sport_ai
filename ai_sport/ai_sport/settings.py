@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'checkin',
     'meals',
     'sleep',
+    'training',
 ]
 
 MIDDLEWARE = [

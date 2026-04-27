@@ -4,22 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>打卡记录</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1a2e; --surface: #222240; --text: #c8c8d8;
+            --text-dim: #707088; --accent: #7c8cf8; --danger: #e05555;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .container{max-width:700px;margin:0 auto;padding:24px 16px 60px}
+        .header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+        .header a{color:var(--text-dim);text-decoration:none;font-size:.85rem}
+        .header a:hover{color:var(--accent)}
+        .header h1{font-size:1.3rem;font-weight:600}
+        .btn{display:inline-block;padding:10px 18px;border-radius:12px;font-size:.85rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
+        .btn-accent{background:var(--accent);color:#fff}
+        .btn-accent:hover{background:#8b9cff;color:#fff;text-decoration:none}
+        .btn-outline{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08)}
+        .btn-outline:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+        .btn-danger{background:rgba(224,85,85,0.15);color:var(--danger)}
+        .btn-danger:hover{background:rgba(224,85,85,0.25);text-decoration:none;color:var(--danger)}
+        .btn-sm{padding:6px 12px;font-size:.78rem}
+        table{width:100%;border-collapse:collapse;font-size:.88rem}
+        th,td{padding:12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.04)}
+        th{color:var(--text-dim);font-weight:500;font-size:.8rem}
+        tr:hover td{background:rgba(255,255,255,0.02)}
+        .actions{display:flex;gap:6px}
+        .empty{text-align:center;padding:40px 0;color:var(--text-dim)}
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>打卡记录</h1>
-        <div class="mb-3">
-            <a href="{% url 'home' %}" class="btn btn-secondary mr-2">返回主页</a>
-            <a href="{% url 'checkin_create' %}" class="btn btn-primary">添加打卡</a>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'home' %}">← 返回</a>
+            <h1>打卡记录</h1>
         </div>
-        <table class="table table-striped">
+        <div style="margin-bottom:16px;display:flex;gap:10px">
+            <a href="{% url 'checkin_create' %}" class="btn btn-accent">添加打卡</a>
+            <a href="{% url 'home' %}" class="btn btn-outline">返回首页</a>
+        </div>
+        {% if checkins %}
+        <table>
             <thead>
                 <tr>
                     <th>活动</th>
-                    <th>时长（分钟）</th>
+                    <th>时长</th>
                     <th>日期</th>
-                    <th>时间</th>
                     <th>位置</th>
                     <th>操作</th>
                 </tr>
@@ -28,18 +58,20 @@
                 {% for checkin in checkins %}
                 <tr>
                     <td>{{ checkin.activity }}</td>
-                    <td>{{ checkin.duration }}</td>
+                    <td>{{ checkin.duration }}分钟</td>
                     <td>{{ checkin.date }}</td>
-                    <td>{{ checkin.time }}</td>
-                    <td>{{ checkin.location|default:"未记录" }}</td>
-                    <td>
-                        <a href="{% url 'checkin_update' checkin.pk %}" class="btn btn-sm btn-warning">编辑</a>
-                        <a href="{% url 'checkin_delete' checkin.pk %}" class="btn btn-sm btn-danger">删除</a>
+                    <td>{{ checkin.location|default:"-" }}</td>
+                    <td class="actions">
+                        <a href="{% url 'checkin_update' checkin.pk %}" class="btn btn-outline btn-sm">编辑</a>
+                        <a href="{% url 'checkin_delete' checkin.pk %}" class="btn btn-danger btn-sm">删除</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+            <div class="empty">还没有打卡记录</div>
+        {% endif %}
     </div>
 </body>
 </html>
