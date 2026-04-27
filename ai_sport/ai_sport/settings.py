@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'sleep',                       # 睡眠记录模块
     'fitness_guide',               # 健身指南模块
     'user_profile',                # 用户个人中心模块
+    'game_system',                 # 游戏化系统
 ]
 
 
@@ -116,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

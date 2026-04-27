@@ -32,19 +32,38 @@ from . import views
 
 
 def home(request):
-    """
-    项目首页视图
+    from django.utils import timezone
+    from checkin.models import Checkin
+    from sleep.models import SleepRecord
+    from meals.models import Meal
+    from game_system.models import UserGameProfile, UserDailyMission
 
-    渲染项目首页模板，显示欢迎信息和主要功能入口。
-    作为整个应用的主入口页面。
+    user = request.user
+    ctx = {}
 
-    Args:
-        request: Django HTTP请求对象
+    if user.is_authenticated:
+        game_profile, _ = UserGameProfile.objects.get_or_create(user=user)
+        today = timezone.now().date()
+        today_checkin = Checkin.objects.filter(user=user, date=today).exists()
+        today_meals = Meal.objects.filter(user=user, date=today).count()
+        today_sleep = SleepRecord.objects.filter(user=user, date=today).exists()
 
-    Returns:
-        HttpResponse: 渲染的首页模板
-    """
-    return render(request, 'home.html')
+        daily_missions = UserDailyMission.objects.filter(
+            user=user, date=today
+        ).select_related('mission').order_by('-completed', 'mission__order')
+
+        ctx = {
+            'game_profile': game_profile,
+            'xp_progress': game_profile.xp_progress,
+            'level_title': game_profile.level_title,
+            'xp_remaining': game_profile.xp_remaining,
+            'today_checkin': today_checkin,
+            'today_meals': today_meals,
+            'today_sleep': today_sleep,
+            'daily_missions': daily_missions,
+        }
+
+    return render(request, 'home.html', ctx)
 
 
 urlpatterns = [
@@ -82,6 +101,9 @@ urlpatterns = [
 
     # 用户个人中心
     path('profile/', views.user_profile, name='user_profile'),
+
+    # 游戏化系统路由
+    path('game/', include('game_system.urls')),
 ]
 
 

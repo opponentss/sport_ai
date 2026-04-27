@@ -1,23 +1,13 @@
-<!--
-    项目首页模板 - 磨砂玻璃风格
-    本页面是整个应用的入口页面，展示四大功能模块入口。
-    使用 Bootstrap 栅格系统和磨砂玻璃设计风格。
--->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>健身打卡</title>
+    <title>健身打卡 - 你的健身冒险</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
@@ -26,242 +16,284 @@
             position: relative;
             overflow-x: hidden;
         }
-
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background:
                 radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 30%);
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; z-index: 0;
         }
-
         .navbar {
-            background: rgba(255, 255, 255, 0.18) !important;
+            background: rgba(255,255,255,0.18) !important;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            padding: 0.6rem 1rem;
-            position: relative;
-            z-index: 1000;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            padding: 0.6rem 1rem; position: relative; z-index: 1000;
         }
-
         .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
+            font-weight: 700; font-size: 1.5rem;
             color: #fff !important;
             text-shadow: 0 2px 15px rgba(0,0,0,0.25);
             letter-spacing: 1px;
-            transition: transform 0.3s ease;
         }
-
-        .navbar-brand:hover {
-            transform: scale(1.05);
-        }
-
-        .navbar-toggler {
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-toggler:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .user-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
+        .user-nav { display: flex; align-items: center; gap: 0.8rem; }
         .user-avatar-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            background: rgba(255, 255, 255, 0.2) !important;
+            display: flex; align-items: center; gap: 0.6rem;
+            background: rgba(255,255,255,0.2) !important;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.35) !important;
-            color: #fff !important;
-            font-weight: 500;
-            border-radius: 30px;
-            padding: 0.4rem 1rem 0.4rem 0.4rem !important;
-            transition: all 0.3s ease;
-            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.35) !important;
+            color: #fff !important; font-weight: 500;
+            border-radius: 30px; padding: 0.4rem 1rem 0.4rem 0.4rem !important;
+            transition: all 0.3s ease; text-decoration: none;
         }
-
         .user-avatar-btn:hover {
-            background: rgba(255, 255, 255, 0.35) !important;
+            background: rgba(255,255,255,0.35) !important;
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-            color: #fff;
-            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); color: #fff; text-decoration: none;
         }
-
         .user-avatar-img {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-
         .user-avatar-placeholder {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            border: 2px solid rgba(255,255,255,0.5);
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.3rem;
         }
-
-        .container {
-            position: relative;
-            z-index: 1;
-        }
-
+        .container { position: relative; z-index: 1; }
         .hero-section {
-            text-align: center;
-            padding: 60px 0 40px;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: #fff;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            letter-spacing: 4px;
-            margin-bottom: 1rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: rgb(255, 255, 255);
-            font-weight: 300;
-        }
-
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            padding: 20px 0;
-        }
-
-        .module-card {
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        .module-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #80e9e99b, rgba(230, 225, 225, 0.5));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .module-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            background: rgba(255, 255, 255, 0.28);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-        }
-
-        .module-card:hover::before {
-            opacity: 1;
-        }
-
-        .module-icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            display: block;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
-        }
-
-        .module-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #cc8888;
-            margin-bottom: 0.8rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .module-desc {
-            color: rgb(255, 255, 255);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .btn-light {
-            background: rgba(255, 255, 255, 0.25) !important;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            color: #fff !important;
-            font-weight: 500;
-            border-radius: 25px;
-            padding: 0.4rem 1.2rem !important;
-            transition: all 0.3s ease;
-        }
-
-        .btn-light:hover {
-            background: rgba(255, 255, 255, 0.4) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            color: #fff;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-section {
+            text-align: center; padding: 30px 0 20px;
             animation: fadeInUp 0.6s ease;
         }
-
-        .module-card:nth-child(1) { animation: fadeInUp 0.6s ease 0.1s both; }
-        .module-card:nth-child(2) { animation: fadeInUp 0.6s ease 0.2s both; }
-        .module-card:nth-child(3) { animation: fadeInUp 0.6s ease 0.3s both; }
-        .module-card:nth-child(4) { animation: fadeInUp 0.6s ease 0.4s both; }
+        .hero-title {
+            font-size: 2.5rem; font-weight: 700;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            letter-spacing: 2px; margin-bottom: 0.5rem;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem; color: rgba(255,255,255,0.9);
+            font-weight: 300; margin-bottom: 0;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        .level-card {
+            padding: 1.5rem 2rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+            margin-bottom: 20px;
+        }
+        .level-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .level-badge {
+            display: flex; align-items: center; gap: 0.8rem;
+        }
+        .level-number {
+            font-size: 2.8rem; font-weight: 700; color: #fff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            line-height: 1;
+        }
+        .level-info {
+            display: flex; flex-direction: column;
+        }
+        .level-label {
+            color: rgba(255,255,255,0.7); font-size: 0.8rem;
+        }
+        .level-title {
+            color: #FFD700; font-weight: 600; font-size: 1rem;
+            text-shadow: 0 0 15px rgba(255,215,0,0.4);
+        }
+        .level-xp {
+            color: rgba(255,255,255,0.9); font-size: 1.1rem; font-weight: 500;
+        }
+        .xp-bar-bg {
+            width: 100%; height: 14px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 7px; overflow: hidden;
+            margin-bottom: 0.3rem;
+        }
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 7px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(102,126,234,0.4);
+        }
+        .xp-text {
+            color: rgba(255,255,255,0.6); font-size: 0.8rem;
+            text-align: right;
+        }
+        .stats-row {
+            display: flex; justify-content: space-around;
+            margin-top: 1rem; padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-icon { font-size: 1.3rem; }
+        .stat-val {
+            color: #fff; font-weight: 700; font-size: 1.2rem;
+        }
+        .stat-lbl {
+            color: rgba(255,255,255,0.6); font-size: 0.7rem;
+        }
+        .today-status {
+            display: flex; gap: 0.8rem; margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+        .status-item {
+            flex: 1;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            padding: 0.8rem; text-align: center;
+            transition: all 0.3s ease;
+        }
+        .status-item.done {
+            background: rgba(40,167,69,0.3);
+            border-color: rgba(40,167,69,0.5);
+        }
+        .status-item .status-icon { font-size: 1.5rem; }
+        .status-item .status-label {
+            color: rgba(255,255,255,0.8); font-size: 0.75rem;
+            margin-top: 0.3rem;
+        }
+        .status-item.done .status-label {
+            color: #fff; font-weight: 600;
+        }
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px; padding: 10px 0;
+        }
+        .module-card {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            padding: 2rem 1.5rem; text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative; overflow: hidden;
+            text-decoration: none;
+        }
+        .module-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, rgba(102,126,234,0.6), rgba(240,147,251,0.5));
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .module-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            background: rgba(255,255,255,0.28);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+        .module-card:hover::before { opacity: 1; }
+        .module-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+        .module-title {
+            font-size: 1.3rem; font-weight: 700;
+            color: #cc8888; margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .module-desc {
+            color: rgba(255,255,255,0.9); font-size: 0.9rem; line-height: 1.5;
+        }
+        .missions-section {
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+        .missions-section .glass-card {
+            padding: 1.2rem 1.5rem;
+        }
+        .mission-row {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .mission-row:last-child { border-bottom: none; }
+        .mission-icon {
+            font-size: 1.5rem; width: 40px; text-align: center;
+        }
+        .mission-info { flex: 1; }
+        .mission-title {
+            color: #fff; font-weight: 500; font-size: 0.9rem;
+        }
+        .mission-progress-text {
+            color: rgba(255,255,255,0.6); font-size: 0.75rem;
+        }
+        .mission-xp {
+            color: #FFD700; font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap;
+        }
+        .mission-check {
+            font-size: 1.3rem;
+        }
+        .btn-light {
+            background: rgba(255,255,255,0.25) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            color: #fff !important; font-weight: 500;
+            border-radius: 25px; padding: 0.4rem 1.2rem !important;
+            transition: all 0.3s ease;
+        }
+        .btn-light:hover {
+            background: rgba(255,255,255,0.4) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); color: #fff;
+        }
+        .game-links {
+            display: flex; gap: 0.8rem; justify-content: center;
+            margin-bottom: 20px;
+        }
+        .game-link {
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px; padding: 0.5rem 1.2rem;
+            color: rgba(255,255,255,0.8); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .game-link:hover {
+            background: rgba(255,255,255,0.25);
+            color: #fff; text-decoration: none;
+            transform: translateY(-2px);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .module-card:nth-child(1) { animation: fadeInUp 0.6s ease 0.4s both; }
+        .module-card:nth-child(2) { animation: fadeInUp 0.6s ease 0.5s both; }
+        .module-card:nth-child(3) { animation: fadeInUp 0.6s ease 0.6s both; }
+        .module-card:nth-child(4) { animation: fadeInUp 0.6s ease 0.7s both; }
 
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            .module-card {
-                padding: 2rem 1.5rem;
-            }
+            .hero-title { font-size: 2rem; }
+            .module-card { padding: 1.5rem 1rem; }
+            .stats-row { flex-wrap: wrap; gap: 0.5rem; }
+            .today-status { flex-wrap: wrap; }
+            .level-number { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -303,33 +335,114 @@
 
     <div class="container">
         <div class="hero-section">
-            <h1 class="hero-title">🏃 健身打卡</h1>
-            <p class="hero-subtitle">记录你的健身旅程，科学管理你的健康</p>
+            <h1 class="hero-title">⚔️ 健身冒险</h1>
+            <p class="hero-subtitle">每一次运动，都是一次升级</p>
         </div>
 
+        {% if user.is_authenticated %}
+        <div class="level-card glass-card">
+            <div class="level-header">
+                <div class="level-badge">
+                    <span class="level-number">Lv.{{ game_profile.level }}</span>
+                    <div class="level-info">
+                        <span class="level-label">当前等级</span>
+                        <span class="level-title">{{ level_title }}</span>
+                    </div>
+                </div>
+                <div class="level-xp">{{ game_profile.xp }} XP</div>
+            </div>
+            <div class="xp-bar-bg">
+                <div class="xp-bar-fill" style="width: {{ xp_progress }}%;"></div>
+            </div>
+            <div class="xp-text">距下一级还需 {{ xp_remaining }} XP</div>
+
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-icon">💪</div>
+                    <div class="stat-val">{{ game_profile.strength }}</div>
+                    <div class="stat-lbl">力量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🏃</div>
+                    <div class="stat-val">{{ game_profile.endurance }}</div>
+                    <div class="stat-lbl">耐力</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🤸</div>
+                    <div class="stat-val">{{ game_profile.agility }}</div>
+                    <div class="stat-lbl">敏捷</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-val">{{ game_profile.willpower }}</div>
+                    <div class="stat-lbl">意志</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="today-status">
+            <div class="status-item {% if today_checkin %}done{% endif %}">
+                <div class="status-icon">💪</div>
+                <div class="status-label">{% if today_checkin %}✅ 已打卡{% else %}今日打卡{% endif %}</div>
+            </div>
+            <div class="status-item {% if today_meals >= 3 %}done{% elif today_meals > 0 %}done{% endif %}">
+                <div class="status-icon">🍽️</div>
+                <div class="status-label">{% if today_meals > 0 %}✅ {{ today_meals }}餐{% else %}今日三餐{% endif %}</div>
+            </div>
+            <div class="status-item {% if today_sleep %}done{% endif %}">
+                <div class="status-icon">😴</div>
+                <div class="status-label">{% if today_sleep %}✅ 已记录{% else %}今日睡眠{% endif %}</div>
+            </div>
+        </div>
+
+        {% if daily_missions %}
+        <div class="missions-section">
+            <div class="glass-card">
+                <h6 style="color:#fff; opacity:0.8; margin-bottom:0.8rem;">📋 今日任务</h6>
+                {% for dm in daily_missions %}
+                <div class="mission-row">
+                    <div class="mission-icon">{% if dm.completed %}✅{% else %}🎯{% endif %}</div>
+                    <div class="mission-info">
+                        <div class="mission-title">{{ dm.mission.title }}</div>
+                        <div class="mission-progress-text">{{ dm.progress }} / {{ dm.mission.target_value }}</div>
+                    </div>
+                    <div class="mission-xp">+{{ dm.mission.xp_reward }}XP</div>
+                    <div class="mission-check">{% if dm.completed %}✅{% else %}⬜{% endif %}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="game-links">
+            <a href="{% url 'leaderboard' %}" class="game-link">🏅 排行榜</a>
+            <a href="{% url 'achievements' %}" class="game-link">🏆 成就殿堂</a>
+        </div>
+        {% endif %}
+
         <div class="module-grid">
-            <a href="{% url 'fitness_guide_home' %}" class="module-card">
+            <a href="{% if user.is_authenticated %}{% url 'fitness_guide_home' %}{% else %}{% url 'login' %}{% endif %}" class="module-card">
                 <span class="module-icon">📚</span>
                 <h3 class="module-title">健身指南</h3>
                 <p class="module-desc">了解健身基础知识，饮食建议，肌肉和器材认识</p>
             </a>
 
-            <a href="{% url 'checkin_list' %}" class="module-card">
-                <span class="module-icon">✅</span>
-                <h3 class="module-title">打卡记录</h3>
-                <p class="module-desc">记录你的健身活动，支持定位功能</p>
+            <a href="{% if user.is_authenticated %}{% url 'checkin_list' %}{% else %}{% url 'login' %}{% endif %}" class="module-card">
+                <span class="module-icon">⚔️</span>
+                <h3 class="module-title">战斗记录</h3>
+                <p class="module-desc">记录你的运动冒险，选择运动类型自动计算卡路里</p>
             </a>
 
-            <a href="{% url 'meal_list' %}" class="module-card">
+            <a href="{% if user.is_authenticated %}{% url 'meal_list' %}{% else %}{% url 'login' %}{% endif %}" class="module-card">
                 <span class="module-icon">🍽️</span>
-                <h3 class="module-title">三餐记录</h3>
-                <p class="module-desc">记录你的饮食情况，支持拍照和AI识别</p>
+                <h3 class="module-title">补给记录</h3>
+                <p class="module-desc">记录饮食补给，支持拍照和AI识别食物</p>
             </a>
 
-            <a href="{% url 'sleep_list' %}" class="module-card">
+            <a href="{% if user.is_authenticated %}{% url 'sleep_list' %}{% else %}{% url 'login' %}{% endif %}" class="module-card">
                 <span class="module-icon">😴</span>
-                <h3 class="module-title">作息记录</h3>
-                <p class="module-desc">记录你的睡眠情况，分析睡眠质量</p>
+                <h3 class="module-title">休息恢复</h3>
+                <p class="module-desc">记录睡眠情况，充足休息也是变强的一环</p>
             </a>
         </div>
     </div>

@@ -226,11 +226,11 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="page-title">💪 打卡记录</h1>
+        <h1 class="page-title">⚔️ 战斗记录</h1>
 
         <div class="btn-bar">
             <a href="{% url 'home' %}" class="btn-home">🏠 返回主页</a>
-            <a href="{% url 'checkin_create' %}" class="btn-add">➕ 添加打卡</a>
+            <a href="{% url 'checkin_create' %}" class="btn-add">⚔️ 记录战斗</a>
         </div>
 
         {% if checkins %}
@@ -238,22 +238,22 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>类型</th>
                         <th>活动</th>
-                        <th>时长（分钟）</th>
+                        <th>时长</th>
+                        <th>消耗</th>
                         <th>日期</th>
-                        <th>时间</th>
-                        <th>位置</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for checkin in checkins %}
                     <tr>
+                        <td>{{ checkin.exercise_type.icon|default:"💪" }}</td>
                         <td>{{ checkin.activity }}</td>
-                        <td>{{ checkin.duration }}</td>
+                        <td>{{ checkin.duration }}分钟</td>
+                        <td>{{ checkin.calories_burned|default:"-" }} kcal</td>
                         <td>{{ checkin.date }}</td>
-                        <td>{{ checkin.time }}</td>
-                        <td>{{ checkin.location|default:"未记录" }}</td>
                         <td>
                             <a href="{% url 'checkin_update' checkin.pk %}" class="btn-edit">✏️ 编辑</a>
                             <a href="{% url 'checkin_delete' checkin.pk %}" class="btn-delete">🗑️ 删除</a>

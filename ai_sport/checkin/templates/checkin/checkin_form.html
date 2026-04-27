@@ -199,11 +199,17 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="page-title">💪 添加/编辑打卡</h1>
+        <h1 class="page-title">⚔️ 记录战斗</h1>
 
         <div class="glass-card">
             <form method="post">
                 {% csrf_token %}
+
+                <div class="form-group">
+                    <label>运动类型</label>
+                    {{ form.exercise_type }}
+                    <small style="color: rgba(255,255,255,0.5);">选择运动类型将自动计算卡路里消耗</small>
+                </div>
 
                 <div class="form-group">
                     <label>活动名称</label>
@@ -216,18 +222,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label>日期</label>
-                    {{ form.date }}
-                </div>
-
-                <div class="form-group">
-                    <label>时间</label>
-                    {{ form.time }}
+                    <label>消耗卡路里（可选，留空自动计算）</label>
+                    {{ form.calories_burned }}
                 </div>
 
                 <div class="form-group">
                     <label>位置</label>
                     {{ form.location }}
+                    <small style="color: rgba(255,255,255,0.5);">如"在家"、"XX健身房"</small>
                 </div>
 
                 <div class="form-group">
