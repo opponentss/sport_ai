@@ -4,33 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>确认删除</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root{--bg:#1a1a2e;--surface:#222240;--text:#c8c8d8;--text-dim:#707088;--danger:#e05555}
+        :root{--primary:#0033A0;--primary-hover:#002780;--secondary:#4DA3FF;--error:#F04438;--radius-sm:10px;--radius-md:14px;--radius-lg:20px;--font-heading:'Inter','Noto Sans SC',sans-serif;--font-body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif}
+        [data-theme="light"]{--bg:#FFFFFF;--bg-card:#F5F7FA;--bg-hover:#EDF0F5;--text:#101828;--text-dim:#98A2B3;--border:#D0D5DD;--border-light:#E4E7EC;--shadow-lg:0 12px 40px rgba(0,0,0,0.08)}
+        [data-theme="dark"]{--bg:#0A1F44;--bg-card:#112852;--bg-hover:#1A3362;--text:#E8EDF5;--text-dim:#6B7FA3;--border:#1E3A6E;--border-light:#16305A;--shadow-lg:0 12px 40px rgba(0,0,0,0.4)}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
-        .card{background:var(--surface);border:1px solid rgba(255,255,255,0.05);border-radius:20px;padding:36px 32px;width:100%;max-width:420px;text-align:center}
-        .card h2{font-size:1.3rem;margin-bottom:12px}
-        .card p{color:var(--text-dim);margin-bottom:24px;font-size:.9rem}
-        .btn-group{display:flex;gap:10px;justify-content:center}
-        .btn{padding:12px 24px;border-radius:12px;font-size:.9rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
-        .btn-danger{background:rgba(224,85,85,0.15);color:var(--danger)}
-        .btn-danger:hover{background:rgba(224,85,85,0.25)}
-        .btn-cancel{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08);padding:12px 24px;border-radius:12px;font-size:.9rem;text-decoration:none;transition:.2s}
-        .btn-cancel:hover{background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none}
+        body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;transition:background 0.3s ease,color 0.3s ease}
+        .card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:36px 32px;width:100%;max-width:420px;text-align:center;box-shadow:var(--shadow-lg)}
+        .card h2{font-size:1.25rem;margin-bottom:12px;font-family:var(--font-heading)}
+        .card p{color:var(--text-dim);margin-bottom:28px;font-size:0.88rem}
+        .btn-group{display:flex;gap:12px;justify-content:center}
+        .btn{padding:12px 28px;border-radius:var(--radius-md);font-size:0.9rem;text-decoration:none;transition:all 0.25s ease;border:none;cursor:pointer;font-family:var(--font-body)}
+        .btn-danger{background:rgba(240,68,56,0.06);color:var(--error)}
+        .btn-danger:hover{background:rgba(240,68,56,0.14)}
+        .btn-cancel{background:transparent;color:var(--text-dim);border:1px solid var(--border);padding:12px 28px;border-radius:var(--radius-md);font-size:0.9rem;text-decoration:none;transition:all 0.25s ease}
+        .btn-cancel:hover{background:var(--bg-hover);color:var(--text);text-decoration:none}
     </style>
 </head>
-<body>
+<body data-theme="{{ is_dark_mode|yesno:'dark,light' }}">
     <div class="card">
         <h2>确认删除</h2>
         <p>确定要删除：{{ meal.get_meal_type_display }} 吗？</p>
-        <form method="post">
-            {% csrf_token %}
-            <div class="btn-group">
-                <button type="submit" class="btn btn-danger">删除</button>
-                <a href="{% url 'meal_list' %}" class="btn-cancel">取消</a>
-            </div>
-        </form>
+        <form method="post">{% csrf_token %}<div class="btn-group"><button type="submit" class="btn btn-danger">删除</button><a href="{% url 'meal_list' %}" class="btn-cancel">取消</a></div></form>
     </div>
 </body>
 </html>

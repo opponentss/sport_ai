@@ -4,77 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>作息记录</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root{--bg:#1a1a2e;--surface:#222240;--text:#c8c8d8;--text-dim:#707088;--accent:#7c8cf8;--danger:#e05555}
+        :root{--primary:#0033A0;--primary-hover:#002780;--secondary:#4DA3FF;--success:#12B76A;--warning:#F79009;--error:#F04438;--radius-sm:10px;--radius-md:14px;--radius-lg:20px;--font-heading:'Inter','Noto Sans SC',sans-serif;--font-body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif}
+        [data-theme="light"]{--bg:#FFFFFF;--bg-card:#F5F7FA;--bg-hover:#EDF0F5;--text:#101828;--text-secondary:#344054;--text-dim:#98A2B3;--border:#D0D5DD;--border-light:#E4E7EC}
+        [data-theme="dark"]{--bg:#0A1F44;--bg-card:#112852;--bg-hover:#1A3362;--text:#E8EDF5;--text-secondary:#B0BED4;--text-dim:#6B7FA3;--border:#1E3A6E;--border-light:#16305A}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .container{max-width:700px;margin:0 auto;padding:24px 16px 60px}
-        .header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-        .header a{color:var(--text-dim);text-decoration:none;font-size:.85rem}
-        .header a:hover{color:var(--accent)}
-        .header h1{font-size:1.3rem;font-weight:600}
-        .btn{display:inline-block;padding:10px 18px;border-radius:12px;font-size:.85rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit;color:#fff}
-        .btn-accent{background:var(--accent)}
-        .btn-accent:hover{background:#8b9cff;text-decoration:none;color:#fff}
-        .btn-outline{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08)}
-        .btn-outline:hover{background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none}
-        .btn-danger{background:rgba(224,85,85,0.15);color:var(--danger)}
-        .btn-danger:hover{background:rgba(224,85,85,0.25);text-decoration:none;color:var(--danger)}
-        .btn-sm{padding:6px 12px;font-size:.78rem}
-        table{width:100%;border-collapse:collapse;font-size:.88rem}
-        th,td{padding:12px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.04)}
-        th{color:var(--text-dim);font-weight:500;font-size:.8rem}
-        tr:hover td{background:rgba(255,255,255,0.02)}
-        .actions{display:flex;gap:6px}
-        .quality-excellent{color:#4a9}
-        .quality-good{color:#7c8cf8}
-        .quality-fair{color:#da8}
-        .quality-poor{color:#e88}
-        .empty{text-align:center;padding:40px 0;color:var(--text-dim)}
+        body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s ease,color 0.3s ease}
+        .container{max-width:720px;margin:0 auto;padding:24px 20px 60px}
+        .header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+        .header a{color:var(--text-dim);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+        .header a:hover{color:var(--primary)}
+        .header h1{font-size:1.25rem;font-weight:600;font-family:var(--font-heading)}
+        .btn{display:inline-block;padding:10px 20px;border-radius:var(--radius-md);font-size:0.85rem;text-decoration:none;transition:all 0.25s ease;border:none;cursor:pointer;font-family:var(--font-body);color:#fff}
+        .btn-accent{background:var(--primary)}
+        .btn-accent:hover{background:var(--primary-hover);text-decoration:none;color:#fff}
+        .btn-outline{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+        .btn-outline:hover{background:var(--bg-hover);color:var(--text);text-decoration:none}
+        .btn-danger{background:rgba(240,68,56,0.06);color:var(--error)}
+        .btn-danger:hover{background:rgba(240,68,56,0.14);text-decoration:none;color:var(--error)}
+        .btn-sm{padding:6px 14px;font-size:0.78rem}
+        table{width:100%;border-collapse:collapse;font-size:0.88rem}
+        th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border-light)}
+        th{color:var(--text-dim);font-weight:500;font-size:0.8rem}
+        tr:hover td{background:var(--bg-card)}
+        .actions{display:flex;gap:8px}
+        .quality-excellent{color:var(--success)}
+        .quality-good{color:var(--primary)}
+        .quality-fair{color:var(--warning)}
+        .quality-poor{color:var(--error)}
+        .empty{text-align:center;padding:48px 0;color:var(--text-dim)}
     </style>
 </head>
-<body>
+<body data-theme="{{ is_dark_mode|yesno:'dark,light' }}">
     <div class="container">
-        <div class="header">
-            <a href="{% url 'home' %}">← 返回</a>
-            <h1>作息记录</h1>
-        </div>
-        <div style="margin-bottom:16px;display:flex;gap:10px">
-            <a href="{% url 'sleep_create' %}" class="btn btn-accent">添加作息记录</a>
-            <a href="{% url 'home' %}" class="btn btn-outline">返回首页</a>
-        </div>
+        <div class="header"><a href="{% url 'home' %}">← 返回</a><h1>作息记录</h1></div>
+        <div style="margin-bottom:20px;display:flex;gap:10px"><a href="{% url 'sleep_create' %}" class="btn btn-accent">添加作息记录</a><a href="{% url 'home' %}" class="btn btn-outline">返回首页</a></div>
         {% if sleep_records %}
         <table>
-            <thead>
-                <tr>
-                    <th>日期</th>
-                    <th>入睡</th>
-                    <th>起床</th>
-                    <th>时长</th>
-                    <th>质量</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
+            <thead><tr><th>日期</th><th>入睡</th><th>起床</th><th>时长</th><th>质量</th><th>操作</th></tr></thead>
             <tbody>
-                {% for sleep_record in sleep_records %}
+                {% for r in sleep_records %}
                 <tr>
-                    <td>{{ sleep_record.date }}</td>
-                    <td>{{ sleep_record.sleep_time }}</td>
-                    <td>{{ sleep_record.wake_time }}</td>
-                    <td>{{ sleep_record.duration|default:"-" }}h</td>
-                    <td class="quality-{{ sleep_record.quality }}">{{ sleep_record.get_quality_display }}</td>
-                    <td class="actions">
-                        <a href="{% url 'sleep_update' sleep_record.pk %}" class="btn btn-outline btn-sm">编辑</a>
-                        <a href="{% url 'sleep_delete' sleep_record.pk %}" class="btn btn-danger btn-sm">删除</a>
-                    </td>
+                    <td>{{ r.date }}</td><td>{{ r.sleep_time }}</td><td>{{ r.wake_time }}</td>
+                    <td>{{ r.duration|default:"-" }}h</td>
+                    <td class="quality-{{ r.quality }}">{{ r.get_quality_display }}</td>
+                    <td class="actions"><a href="{% url 'sleep_update' r.pk %}" class="btn btn-outline btn-sm">编辑</a><a href="{% url 'sleep_delete' r.pk %}" class="btn btn-danger btn-sm">删除</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% else %}
-            <div class="empty">还没有作息记录</div>
-        {% endif %}
+        {% else %}<div class="empty">还没有作息记录</div>{% endif %}
     </div>
 </body>
 </html>

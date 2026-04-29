@@ -4,69 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三餐记录</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root{--bg:#1a1a2e;--surface:#222240;--text:#c8c8d8;--text-dim:#707088;--accent:#7c8cf8;--danger:#e05555}
+        :root{--primary:#0033A0;--primary-hover:#002780;--secondary:#4DA3FF;--success:#12B76A;--warning:#F79009;--error:#F04438;--radius-sm:10px;--radius-md:14px;--radius-lg:20px;--font-heading:'Inter','Noto Sans SC',sans-serif;--font-body:'Noto Sans SC',-apple-system,BlinkMacSystemFont,sans-serif}
+        [data-theme="light"]{--bg:#FFFFFF;--bg-card:#F5F7FA;--bg-hover:#EDF0F5;--text:#101828;--text-secondary:#344054;--text-dim:#98A2B3;--border:#D0D5DD;--border-light:#E4E7EC;--input-bg:#FFFFFF;--shadow:0 4px 12px rgba(0,0,0,0.05)}
+        [data-theme="dark"]{--bg:#0A1F44;--bg-card:#112852;--bg-hover:#1A3362;--text:#E8EDF5;--text-secondary:#B0BED4;--text-dim:#6B7FA3;--border:#1E3A6E;--border-light:#16305A;--input-bg:rgba(255,255,255,0.05);--shadow:0 4px 12px rgba(0,0,0,0.2)}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
-        .header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-        .header a{color:var(--text-dim);text-decoration:none;font-size:.85rem}
-        .header a:hover{color:var(--accent)}
-        .header h1{font-size:1.3rem;font-weight:600}
-        .btn{display:inline-block;padding:10px 18px;border-radius:12px;font-size:.85rem;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit;color:#fff}
-        .btn-accent{background:var(--accent)}
-        .btn-accent:hover{background:#8b9cff;text-decoration:none;color:#fff}
-        .btn-outline{background:transparent;color:var(--text-dim);border:1px solid rgba(255,255,255,0.08)}
-        .btn-outline:hover{background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none}
-        .btn-danger{background:rgba(224,85,85,0.15);color:var(--danger)}
-        .btn-danger:hover{background:rgba(224,85,85,0.25);text-decoration:none;color:var(--danger)}
-        .btn-sm{padding:6px 12px;font-size:.78rem}
+        body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s ease,color 0.3s ease}
+        .container{max-width:840px;margin:0 auto;padding:24px 20px 60px}
+        .header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+        .header a{color:var(--text-dim);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+        .header a:hover{color:var(--primary)}
+        .header h1{font-size:1.25rem;font-weight:600;font-family:var(--font-heading)}
+        .btn{display:inline-block;padding:10px 20px;border-radius:var(--radius-md);font-size:0.85rem;text-decoration:none;transition:all 0.25s ease;border:none;cursor:pointer;font-family:var(--font-body);color:#fff}
+        .btn-accent{background:var(--primary)}
+        .btn-accent:hover{background:var(--primary-hover);text-decoration:none;color:#fff}
+        .btn-outline{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+        .btn-outline:hover{background:var(--bg-hover);color:var(--text);text-decoration:none}
+        .btn-danger{background:rgba(240,68,56,0.06);color:var(--error)}
+        .btn-danger:hover{background:rgba(240,68,56,0.14);text-decoration:none;color:var(--error)}
+        .btn-sm{padding:6px 14px;font-size:0.78rem}
         .meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-        .meal-card{background:var(--surface);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);transition:.2s}
-        .meal-card:hover{border-color:rgba(124,140,248,0.2);transform:translateY(-2px)}
+        .meal-card{background:var(--bg-card);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border-light);box-shadow:var(--shadow);transition:all 0.25s ease}
+        .meal-card:hover{border-color:var(--secondary);transform:translateY(-2px)}
         .meal-card img{width:100%;height:140px;object-fit:cover}
         .meal-card .card-body{padding:14px 16px}
-        .meal-card .meal-type{font-weight:600;font-size:.9rem;margin-bottom:4px}
-        .meal-card .meal-info{font-size:.8rem;color:var(--text-dim)}
-        .meal-card .meal-cal{color:var(--accent);margin-top:4px;font-size:.85rem}
-        .meal-card .actions{display:flex;gap:6px;margin-top:10px}
-        .empty{text-align:center;padding:40px 0;color:var(--text-dim)}
+        .meal-card .meal-type{font-weight:600;font-size:0.9rem;margin-bottom:4px;font-family:var(--font-heading)}
+        .meal-card .meal-info{font-size:0.8rem;color:var(--text-dim)}
+        .meal-card .meal-cal{color:var(--primary);margin-top:4px;font-size:0.85rem;font-weight:500}
+        .meal-card .actions{display:flex;gap:8px;margin-top:12px}
+        .empty{text-align:center;padding:48px 0;color:var(--text-dim)}
     </style>
 </head>
-<body>
+<body data-theme="{{ is_dark_mode|yesno:'dark,light' }}">
     <div class="container">
-        <div class="header">
-            <a href="{% url 'home' %}">← 返回</a>
-            <h1>三餐记录</h1>
-        </div>
-        <div style="margin-bottom:16px;display:flex;gap:10px">
-            <a href="{% url 'meal_create' %}" class="btn btn-accent">添加三餐记录</a>
-            <a href="{% url 'home' %}" class="btn btn-outline">返回首页</a>
-        </div>
+        <div class="header"><a href="{% url 'home' %}">← 返回</a><h1>三餐记录</h1></div>
+        <div style="margin-bottom:20px;display:flex;gap:10px"><a href="{% url 'meal_create' %}" class="btn btn-accent">添加三餐记录</a><a href="{% url 'home' %}" class="btn btn-outline">返回首页</a></div>
         {% if meals %}
         <div class="meal-grid">
             {% for meal in meals %}
             <div class="meal-card">
-                {% if meal.image %}
-                <img src="{{ meal.image.url }}" alt="{{ meal.get_meal_type_display }}">
-                {% endif %}
+                {% if meal.image %}<img src="{{ meal.image.url }}" alt="{{ meal.get_meal_type_display }}">{% endif %}
                 <div class="card-body">
                     <div class="meal-type">{{ meal.get_meal_type_display }}</div>
                     <div class="meal-info">{{ meal.date }} {{ meal.time }}</div>
                     {% if meal.description %}<div class="meal-info" style="margin-top:4px">{{ meal.description }}</div>{% endif %}
                     {% if meal.calories %}<div class="meal-cal">{{ meal.calories }} kcal</div>{% endif %}
-                    <div class="actions">
-                        <a href="{% url 'meal_update' meal.pk %}" class="btn btn-outline btn-sm">编辑</a>
-                        <a href="{% url 'meal_delete' meal.pk %}" class="btn btn-danger btn-sm">删除</a>
-                    </div>
+                    <div class="actions"><a href="{% url 'meal_update' meal.pk %}" class="btn btn-outline btn-sm">编辑</a><a href="{% url 'meal_delete' meal.pk %}" class="btn btn-danger btn-sm">删除</a></div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        {% else %}
-            <div class="empty">还没有三餐记录</div>
-        {% endif %}
+        {% else %}<div class="empty">还没有三餐记录</div>{% endif %}
     </div>
 </body>
 </html>

@@ -9,4 +9,5 @@ urlpatterns = [
     path('quick/<str:action>/', views.quick_action, name='quick_action'),
     path('achievements/', views.achievements_view, name='achievements'),
     path('settings/', views.settings_view, name='settings'),
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
 ]

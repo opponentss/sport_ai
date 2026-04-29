@@ -193,6 +193,17 @@ def settings_view(request):
     return render(request, 'training/settings.html', ctx)
 
 
+@login_required
+def toggle_theme(request):
+    if request.method == 'POST':
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        profile.dark_mode = not profile.dark_mode
+        profile.save()
+        from django.http import JsonResponse
+        return JsonResponse({'dark_mode': profile.dark_mode})
+    return redirect('home')
+
+
 def check_achievements(user, plan, status, today):
     user_achievement_ids = set(
         UserAchievement.objects.filter(user=user).values_list('achievement_id', flat=True)
