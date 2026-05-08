@@ -28,7 +28,7 @@ class TrainingSessionAdmin(admin.ModelAdmin):
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = ['name', 'condition_type', 'condition_value', 'xp_reward', 'is_hidden']
+    list_display = ['name', 'condition_type', 'condition_value', 'xp_reward', 'is_hidden', 'reward_url']
 
 
 @admin.register(UserAchievement)

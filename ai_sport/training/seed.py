@@ -194,4 +194,20 @@ def seed_achievements():
         if created:
             created_count += 1
 
+    streak_30, streak_30_created = Achievement.objects.get_or_create(
+        name='你过关了',
+        defaults={
+            'description': '连续训练30天，你过关！可以卸掉这个软件，下载进阶版继续挑战了。',
+            'icon': '🏁',
+            'condition_type': 'streak_days',
+            'condition_value': 30,
+            'xp_reward': 200,
+            'is_hidden': False,
+            'reward_url': 'https://github.com/luofengzero/ai_sport/releases',
+            'reward_label': '下载进阶版 →',
+        },
+    )
+    if streak_30_created:
+        created_count += 1
+
     return created_count

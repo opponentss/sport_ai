@@ -103,7 +103,8 @@ def training_session(request, plan_id=None):
                 'leveled_up': leveled_up,
                 'streak_days': profile.streak_days,
                 'new_achievements': [
-                    {'name': a.name, 'icon': a.icon, 'description': a.description}
+                    {'name': a.name, 'icon': a.icon, 'description': a.description,
+                     'reward_url': a.reward_url, 'reward_label': a.reward_label}
                     for a in new_achievements
                 ],
             })

@@ -125,6 +125,8 @@ class Achievement(models.Model):
     condition_value = models.IntegerField(default=1)
     xp_reward = models.IntegerField(default=50)
     is_hidden = models.BooleanField(default=False)
+    reward_url = models.URLField(blank=True, default='')
+    reward_label = models.CharField(max_length=100, blank=True, default='')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
